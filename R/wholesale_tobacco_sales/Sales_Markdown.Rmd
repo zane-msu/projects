@@ -1,0 +1,134 @@
+---
+title: "RYO Sales Analysis"
+author: "Zane Shango"
+date: "2/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+library(ggplot2)
+library(reshape2)
+library(tidyverse)
+library(dplyr)
+
+
+setwd("~/RYO")
+
+# load in data
+library(readxl)
+ccv17 <- read_excel("2017_CCV_Sales.xlsx")
+ccv18 <- read_excel("2018_CCV_Sales.xlsx")
+ccv19 <- read_excel("2019_CCV_Sales.xlsx")
+ccv_totals <- read_excel("total_ccv_sales.xlsx")
+
+
+
+# melt dataframes for plotting using pivor_longer
+ccv17_long <- ccv17 %>%
+  pivot_longer(
+    cols = c('Cigarettes','Vaping','Cigars'), 
+    names_to = "Product",
+    values_to = "Total_Sold"
+  )
+
+ccv18_long <- ccv18 %>%
+  pivot_longer(
+    cols = c('Cigarettes','Vaping','Cigars'),
+    names_to = "Product",
+    values_to = "Total_Sold"
+  )
+
+ccv19_long <- ccv19 %>%
+  pivot_longer(
+    cols = c('Cigarettes','Vaping','Cigars'),
+    names_to = "Product",
+    values_to = "Total_Sold"
+  )
+
+ccv_totals_long <- ccv_totals %>%
+  pivot_longer(
+    cols = c('Cigarettes','Vaping','Cigars'),
+    names_to = "Product",
+    values_to = "Total_Sold"
+  )
+
+# need to set factor levels in month's cronological order for each dataframe
+ccv17_long$Month <- factor(ccv17_long$Month, levels = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"))
+
+ccv18_long$Month <- factor(ccv18_long$Month, levels = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"))
+
+ccv19_long$Month <- factor(ccv19_long$Month, levels = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"))
+
+ccv_totals_long$Year <- factor(ccv_totals_long$Year, levels = c("2017","2018","2019"))
+```
+
+## 2017 Sales
+```{r, echo = FALSE}
+ccv17_plot <- ggplot(data = ccv17_long, aes(x = Month, y = Total_Sold, color = Product, group = Product)) +
+  geom_point() + 
+  geom_line() + 
+  ggtitle("2017 Sales") + 
+  theme(plot.title = element_text(hjust = 0.5))
+ccv17_plot
+
+```
+
+In 2017, the most noticable trend seems to be a spike in purchasing of all products in the month of August. Vaping was noticably increasing in sales almost every month, while Cigarettes stayed mostly stagnant; and Cigars varied a lot on a per month basis, but overall stayed within the same range.
+
+## 2018 Sales
+```{r, echo = FALSE}
+ccv18_plot <- ggplot(data = ccv18_long, aes(x = Month, y = Total_Sold, color = Product, group = Product)) +
+  geom_point() +
+  geom_line() + 
+  ggtitle("2018 Sales") +
+  theme(plot.title = element_text(hjust = 0.5))
+ccv18_plot
+```
+
+In 2018, Vaping has overtaken Cigars are the top seller, and continues its path of monthly sales growth; however both Cigars and Cigarettes follow the same trend through the year.
+
+
+## 2019 Sales
+```{r, echo = FALSE}
+ccv19_plot <- ggplot(data = ccv19_long, aes(x = Month, y = Total_Sold, color = Product, group = Product)) +
+  geom_point() + 
+  geom_line() + 
+  ggtitle("2019 Sales") + 
+  theme(plot.title = element_text(hjust = 0.5))
+ccv19_plot
+```
+
+In 2019, you can see the drastic drop in Vaping after the ban that was put into place at the beginining of September. Cigars and Cigarettes followed a very similar trendline, and both actually experienced a decrease in sales between August and September, but on a smaller scale than Vaping. In 2020, it will be interesting to see how the age increase to purchase these products will affect their sales. 
+
+
+## Total Analysis
+```{r, echo = FALSE}
+total_plot <- ggplot(data = ccv_totals_long, 
+       aes(x = Year, y = Total_Sold, fill = Product)) +
+  geom_bar(stat = 'Identity', position = 'dodge') + 
+  ggtitle("2017-2019 Total Sales") + 
+  theme(plot.title = element_text(hjust = 0.5))
+total_plot
+```
+```{r, echo = FALSE}
+total_faceted <- ggplot(data = ccv_totals_long, 
+       aes(x = Product, y = Total_Sold, fill = Product)) +
+  geom_bar(stat = 'Identity', position = 'dodge') + 
+  facet_wrap(~Year) + 
+  ggtitle("2017-2019 Total Sales") + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+total_faceted
+```
+
+When analyzing total sales, it is clear the trend is shifting more and more to Vaping as the total sales have been climbing over the past 3 years. In fact they've risen from last to first in terms of total sales over this 3 year span. Cigars have been declining each year, but not at a drastic rate; however Cigarettes' incline in sales each year has been enough to overtake Cigars as the second highest selling product. Overall Vaping appears to be the strong trend; but it will be interesting to see how recent law changes regarding tobacco products affect 2020 sales.
+
+
+
+
+
+

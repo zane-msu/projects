@@ -1,0 +1,424 @@
+---
+title: "Starbucks and Dunkin' Donuts Analysis"
+author: "Zane Shango"
+date: "4/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(openintro)
+library(tidyverse)
+library(plotly)
+library(quantmod)
+library(ggthemes)
+library(reshape2)
+library(janitor)
+library(gtrendsR)
+library(stringr)
+
+
+setwd("~/PLS397/final_project/coffee_project")
+```
+
+## Load in and Clean Data
+```{r}
+starbucks <- read.csv("directory.csv")
+
+
+# change factor variables to characters
+starbucks$City <- as.character(starbucks$City)
+starbucks$State.Province <- as.character(starbucks$State.Province)
+starbucks$Country <- as.character(starbucks$Country)
+starbucks$Postcode <- as.character(starbucks$Postcode)
+starbucks$Brand <- as.character(starbucks$Brand)
+
+# filter starbucks to only US locations, filter out alaska and hawaii
+# starbucks <- starbucks[(starbucks$Country == 'US') & (starbucks$State.Province != 'AK') & starbucks$State.Province != 'HI',]
+starbucks <- starbucks %>% 
+  filter(Country == 'US') 
+  
+
+# change state abbreviations to lowercase and names to match map data
+starbucks$State.Province <- tolower(abbr2state(starbucks$State.Province))
+
+# create state abbreviation column for map
+starbucks$State.Abbr <- state2abbr(starbucks$State.Province)
+
+
+dunkin <- read.csv("dunkin.csv")
+```
+
+
+
+## Stock Price Analysis
+```{r}
+# extract stock price data over time period (August 2011- January 2020)
+#sbux <- getSymbols("SBUX", src = "yahoo", from = "2011-08-01", to = "2020-04-01", auto.assign = FALSE)
+#dnkn <- getSymbols("DNKN", src = "yahoo", from = "2011-08-01", to = "2020-04-01", auto.assign = FALSE)
+
+# timeout issues, just load in variables used for coffee_app (includes stock price data scraping using the above code)
+load(file = "coffee_vars.rda")
+```
+
+
+```{r}
+sbux <- as.data.frame(sbux)
+dnkn <- as.data.frame(dnkn)
+
+# create date column and column with only year for shiny app
+sbux$date <- as.Date(format(rownames(sbux)))
+sbux$year <- as.numeric(format(sbux$date, "%Y"))
+
+dnkn$date <- as.Date(format(rownames(dnkn)))
+dnkn$year <- as.numeric(format(dnkn$date, "%Y"))
+
+```
+
+
+
+```{r}
+# create plots showing the price changes
+stocks_plot <- ggplot() + 
+  geom_line(sbux, mapping = aes(x = date, y = SBUX.Close, color = "Starbucks")) + 
+  geom_line(dnkn, mapping = aes(x = date, y = DNKN.Close, color = "Dunkin' Donuts")) + 
+  scale_color_manual(name = "", values = c("Starbucks" = "darkgreen", "Dunkin' Donuts" = "darkorange")) +
+  labs(
+    x = "Date",
+    y = "Price",
+    title = "SBUX vs DNKN Stock Price Analysis") + 
+  theme_bw() +
+  theme(
+    text = element_text(family = "Times"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5, size = 16),
+    plot.margin = unit(c(1,1,1,1), "cm"),
+    legend.position = "top",
+    legend.text = element_text(size = 10),
+    legend.box.background = element_rect(color = "grey70"),
+    panel.border = element_rect(linetype = 'solid', fill = NA, color = "grey80"),
+    panel.grid = element_line(color = "grey90", linetype = "solid", lineend = "butt")) + 
+  scale_x_date(date_labels = "%b %Y", date_breaks = "6 months") + 
+  scale_y_continuous(labels=scales::dollar_format())  
+  
+  
+stocks_plot
+```
+
+<P style="page-break-before: always">
+
+## Map
+```{r}
+# combine dataframes for mapping with plotly
+
+# start by masking starbucks and dunkin dataframes, to have only the columns needed for mapping
+# and rename the columns so they match
+starbucks_map <- starbucks %>%
+  select(Brand, City, State.Abbr, Country, Longitude, Latitude)
+  
+dunkin_map <- dunkin %>%
+  select(name, city, state, country, lng, lat) %>%
+  rename(Brand = name, City = city, State.Abbr = state, Country = country, Longitude = lng, Latitude = lat)
+
+
+# rbind them into a new dataframe
+map_data <- rbind(starbucks_map, dunkin_map)
+
+# filter for only starbucks and dunkin donuts brands (remove Teavana, Coffee House Holdings, and Evolution Fresh)
+# and add color column for mapping
+# and add  city.state column for hovertext
+map_data <- map_data %>%
+  filter(Brand %in% c("Starbucks", "Dunkin Donuts")) %>%
+  mutate(Color = ifelse(Brand == "Starbucks", "darkgreen", 
+                        ifelse(Brand == "Dunkin Donuts", "orange", NA))) %>%
+  mutate(City.State = paste(City, State.Abbr, sep = ', '))
+
+
+head(map_data)
+```
+
+
+
+```{r}
+#plotly map with streetmap style
+
+# list with colors orange and dark green to assign below
+map_colors <- c("#FF8000", "#006600")
+
+
+spatial <- map_data
+spatial <- spatial %>%
+  plot_ly(
+    lat = ~Latitude,
+    lon = ~Longitude,
+    color = ~Brand, # color by Brand
+    colors = map_colors, # assign map_colors list as colors to use
+    marker = list(opacity = .4), # set opacity (alpha) to .4 to help show density better
+    type = 'scattermapbox',
+    hovertext = map_data[,"City.State"]) # use new column with City and State for hovertext
+
+# assign layout and style
+spatial <- spatial %>%
+  layout(
+    mapbox = list(
+      style = 'open-street-map',
+      zoom =2.5,
+      center = list(lon = -98, lat = 34))) 
+
+spatial
+
+```
+
+
+## Summary Table
+```{r}
+# create summary that gets the number of stores for each brand in each state
+summary <- map_data %>%
+  select(Brand, State.Abbr) %>%
+  group_by(Brand, State.Abbr) %>%
+  summarize(
+    stores = length(State.Abbr)
+  ) %>%
+  rename(State = State.Abbr)
+
+# use dcast to "flip" the summary and have the states and brands as columns, while stores is the values 
+# use adorn_totals to create a row at the bottom with total number of stores in the USA for each brand
+summary_table <- dcast(summary, State~Brand, value.var = "stores")
+summary_table <- summary_table %>%
+  adorn_totals("row")
+
+summary_table
+
+```
+
+
+## Google Trends Analysis
+
+Hits is a range from 0 to 100 in relation to the search term's most popular time in the range provided. So, a hits level of 40 means the term is being searched at 40% of the highest its ever been searched. 
+```{r}
+# starbucks gtrendR scraping
+sbux_food1 <- c("starbucks breakfast", "starbucks lunch", "starbucks sandwich", "starbucks muffin")
+           
+sbux_food2 <- c("starbucks bagel", "starbucks bakery", "starbucks beyond meat", "starbucks snacks",
+              "starbucks food")
+
+sbux_drinks1 <- c("starbucks latte", "starbucks americano", "starbucks cappucino", "starbucks macchiato",
+                 "starbucks espresso")
+
+sbux_drinks2 <- c("starbucks cold brew", "starbucks iced coffee", "starbucks iced latte", "starbucks coffee",
+                 "starbucks drinks")
+
+sbux_drinks3 <- c("starbucks hot chocolate", "starbucks tea", "starbucks chai", "starbucks dark roast",
+                  "starbucks medium roast")
+
+
+# run gtrends, use same time frame as stock analysis
+# sbux_food_trends1 <- gtrends(keyword = sbux_food1, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# sbux_food_trends2 <- gtrends(keyword = sbux_food2, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# sbux_drinks_trends1 <- gtrends(keyword = sbux_drinks1, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# sbux_drinks_trends2 <- gtrends(keyword = sbux_drinks2, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# sbux_drinks_trends3 <- gtrends(keyword = sbux_drinks3, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+
+# timeout issues running this as well, variables are stored in loaded rda file "coffee_vars", data was scraped using the code above
+
+```
+
+
+```{r}
+# dunkin gtrendR scraping
+dnkn_food1 <- c("dunkin breakfast", "dunkin lunch", "dunkin sandwich", "dunkin muffin")
+           
+dnkn_food2 <- c("dunkin bagel", "dunkin bakery", "dunkin beyond meat", "dunkin snacks",
+              "dunkin food")
+
+dnkn_drinks1 <- c("dunkin latte", "dunkin americano", "dunkin cappucino", "dunkin macchiato",
+                 "dunkin espresso")
+
+dnkn_drinks2 <- c("dunkin cold brew", "dunkin iced coffee", "dunkin iced latte", "dunkin coffee",
+                 "dunkin drinks")
+
+dnkn_drinks3 <- c("dunkin hot chocolate", "dunkin tea", "dunkin chai", "dunkin dark roast",
+                  "dunkin medium roast")
+
+
+# run gtrends, use same time frame as stock analysis
+# dnkn_food_trends1 <- gtrends(keyword = dnkn_food1, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# dnkn_food_trends2 <- gtrends(keyword = dnkn_food2, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# dnkn_drinks_trends1 <- gtrends(keyword = dnkn_drinks1, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# dnkn_drinks_trends2 <- gtrends(keyword = dnkn_drinks2, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+# dnkn_drinks_trends3 <- gtrends(keyword = dnkn_drinks3, gprop = "web", geo = "US", time = "2011-08-01 2020-04-01")
+
+# same as starbucks google data, timeout issues running this as well, variables are stored in loaded rda file "coffee_vars", data was scraped using the code above
+
+```
+
+
+
+```{r, warning = FALSE, message = FALSE}
+# merge starbucks and dunkin into one dataframe each
+# select interest_over_time gtrendsR result
+# create column with month number, only plot every six months or twice a year
+
+
+## THIS DATA CLEANING CAN BE SEEN IN FINAL GOOGLE TRENDS DATAFRAMES
+## IT IS COMMENTED OUT DUE TO TIMEOUT ISSUES IN ABOVE CHUNKS, BUT THE CHANGES WERE SAVED AND LOADED IN WITH "coffee_vars.rda"
+# sbux_food_trends <- rbind(sbux_food_trends1$interest_over_time, sbux_food_trends2$interest_over_time)
+# sbux_drinks_trends <- rbind(sbux_drinks_trends1$interest_over_time, sbux_drinks_trends2$interest_over_time,
+#                             sbux_drinks_trends3$interest_over_time)
+# 
+# dnkn_food_trends <- rbind(dnkn_food_trends1$interest_over_time, dnkn_food_trends2$interest_over_time)
+# dnkn_drinks_trends <- rbind(dnkn_drinks_trends1$interest_over_time, dnkn_drinks_trends2$interest_over_time,
+#                             dnkn_drinks_trends3$interest_over_time)
+# 
+# # add month column to dataframes
+# sbux_food_trends <- sbux_food_trends %>%
+#   mutate(
+#     month = as.numeric(format(date, "%m"))
+#   )
+# 
+# sbux_drinks_trends <- sbux_drinks_trends %>%
+#   mutate(
+#     month = as.numeric(format(date, "%m"))
+#   )
+# 
+# dnkn_food_trends <- dnkn_food_trends %>%
+#   mutate(
+#     month = as.numeric(format(date, "%m"))
+#   )
+# 
+# dnkn_drinks_trends <- dnkn_drinks_trends %>%
+#   mutate(
+#     month = as.numeric(format(date, "%m"))
+#   )
+# 
+# # change "hits" to numeric rather than factor
+# sbux_drinks_trends$hits <- as.numeric(sbux_drinks_trends$hits)
+# sbux_food_trends$hits <- as.numeric(sbux_food_trends$hits)
+# dnkn_drinks_trends$hits <- as.numeric(dnkn_drinks_trends$hits)
+# dnkn_food_trends$hits <- as.numeric(dnkn_food_trends$hits)
+# 
+# 
+# # set NAs to zero for hits column
+# sbux_drinks_trends$hits[is.na(sbux_drinks_trends$hits)] <- 0
+# sbux_food_trends$hits[is.na(sbux_food_trends$hits)] <- 0
+# dnkn_drinks_trends$hits[is.na(dnkn_drinks_trends$hits)] <- 0
+# dnkn_food_trends$hits[is.na(dnkn_food_trends$hits)] <- 0
+# 
+# 
+# # create original column to preserve original keyword column
+# # use separate split keyword column into brand and item
+# # use unite to concatonate items with two words back together
+# 
+# sbux_drinks_trends <- sbux_drinks_trends %>%
+#   mutate(
+#     original = keyword
+#   ) %>%
+#   separate(keyword, c("brand", "item1", "item2"), sep = " ") %>%
+#   unite("item_total", item1, item2,  sep = " ", na.rm = TRUE)
+# 
+# sbux_food_trends <- sbux_food_trends %>%
+#   mutate(
+#     original = keyword
+#   ) %>%
+#   separate(keyword, c("brand", "item1", "item2"), sep = " ") %>%
+#   unite("item_total", item1, item2,  sep = " ", na.rm = TRUE)
+# 
+# dnkn_drinks_trends <- dnkn_drinks_trends %>%
+#   mutate(
+#     original = keyword
+#   ) %>%
+#   separate(keyword, c("brand", "item1", "item2"), sep = " ") %>%
+#   unite("item_total", item1, item2,  sep = " ", na.rm = TRUE)
+# 
+# dnkn_food_trends <- dnkn_food_trends %>%
+#   mutate(
+#     original = keyword
+#   ) %>%
+#   separate(keyword, c("brand", "item1", "item2"), sep = " ") %>%
+#   unite("item_total", item1, item2,  sep = " ", na.rm = TRUE)
+# 
+# 
+# # use stringr to make all item_total columns capital first letters
+# 
+# sbux_drinks_trends$item_total <- str_to_title(sbux_drinks_trends$item_total)
+# sbux_food_trends$item_total <- str_to_title(sbux_food_trends$item_total)
+# dnkn_drinks_trends$item_total <- str_to_title(dnkn_drinks_trends$item_total)
+# dnkn_food_trends$item_total <- str_to_title(dnkn_food_trends$item_total)
+# 
+
+
+```
+
+
+```{r}
+# example of plot
+sbux_coffee <- sbux_drinks_trends %>%
+  filter(item_total == "Coffee" & month %in% c(2,8))
+
+dnkn_coffee <- dnkn_drinks_trends %>%
+  filter(item_total == "Coffee" & month %in% c(2,8))
+
+ggplot() + 
+  geom_point(sbux_coffee, mapping = aes(x = date, y = hits, color = "Starbucks")) +
+  geom_line(sbux_coffee, mapping = aes(x = date, y = hits, color = "Starbucks", group = 1)) + 
+  geom_point(dnkn_coffee, mapping = aes(x = date, y = hits, color = "Dunkin Donuts")) +
+  geom_line(dnkn_coffee, mapping = aes(x = date, y = hits, color = "Dunkin Donuts", group = 1)) +
+  scale_color_manual(name = "", values = c("Starbucks" = "darkgreen", "Dunkin Donuts" = "darkorange")) +
+  labs(
+    x = "Date",
+    y = "Hits",
+    title = "Coffee"
+  ) + 
+  theme_bw() + 
+  theme(
+    text = element_text(family = "Times"),
+    plot.title = element_text(hjust = 0.5, size = 16),
+    plot.margin = unit(c(1,1,1,1), "cm"),
+    legend.position = "top",
+    legend.text = element_text(size = 10),
+    legend.box.background = element_rect(color = "grey70"),
+    panel.border = element_rect(linetype = 'solid', fill = NA, color = "grey80"),
+    panel.grid = element_line(color = "grey90", linetype = "solid", lineend = "butt"),
+  ) +
+  scale_y_continuous(breaks = seq(0,100, by = 20), expand = c(.25,.25))
+
+```
+
+
+
+## Save dataframes and other variables needed for shiny app as an rda file that can be loaded in
+```{r}
+
+# save(sbux, dnkn, map_data, summary_table, sbux_drinks_trends, sbux_food_trends, dnkn_drinks_trends,
+#      dnkn_food_trends, file = "coffee_vars.rda" )
+
+```
+
+<P style="page-break-before: always">
+
+## References
+
+*For Starbucks and Dunkin Donuts Data*
+
+https://www.kaggle.com/starbucks/store-locations
+
+https://www.kaggle.com/jpbulman/usa-dunkin-donuts-stores 
+
+
+*For Flat json File Conversion to csv Table*
+
+https://konklone.io/json/
+
+
+*For Stock Price Info (scraped with quantmod package)*
+
+https://finance.yahoo.com/ 
+
+*For Google Trends Data (scraped with gtrendsR package* 
+
+https://trends.google.com/trends/?geo=US 
+
+
+
+

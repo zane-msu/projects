@@ -1,0 +1,834 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={NHL Analysis},
+            pdfauthor={Kurtis Potier, Zane Shango, Nick Hiller},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{NHL Analysis}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Kurtis Potier, Zane Shango, Nick Hiller}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{4/23/2020}
+
+
+\begin{document}
+\maketitle
+
+\hypertarget{goal}{%
+\subsubsection{Goal}\label{goal}}
+
+\begin{itemize}
+\tightlist
+\item
+  Does tanking in the NHL lead to team success in the future?
+\end{itemize}
+
+To answer this we used a variety of ways to determine what a draft pick
+is actual worth, in terms of impact once the player earns an entry level
+NHL contract, the amount of points a draft pick is expected to produce,
+and the the probabiliy of a player actually playing in the NHL.
+
+Along with this we explored a number of interesting topics including the
+impact of an NHL team's legacy based on the age of the organization and
+the NHL city's climate on a team's point total.
+
+\hypertarget{import-and-clean-data}{%
+\subsubsection{Import and Clean Data}\label{import-and-clean-data}}
+
+Here we load in our datasets which tell us:
+
+\begin{itemize}
+\item
+  Draft results since 1991, with variables like round selected, overall,
+  nationality, age, position, amateur league, and some NHL career stats
+  of that player
+\item
+  End of season standings since 1991, complete with points totals and
+  more statistics
+\item
+  Individual skater and goalie statistics for each season since 1991
+\item
+  Each NHL organization's years since being founded, and the current
+  city's temperature data
+\end{itemize}
+
+Using the draft result and skater datasets, we created a new dataset
+with each drafted players statistics for their first 3 seasons played in
+the NHL (which is the length of an entry level contract)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{################## import draft data ####################}
+\NormalTok{draft <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/potierku/talk_data_to_me/master/final_project/draft.txt"}\NormalTok{,}\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
+\CommentTok{#delete rows with 2017,2018,2019}
+\NormalTok{draft <-}\StringTok{ }\NormalTok{draft[}\OperatorTok{-}\KeywordTok{which}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Year }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2016"}\NormalTok{,}\StringTok{"2017"}\NormalTok{,}\StringTok{"2018"}\NormalTok{,}\StringTok{"2019"}\NormalTok{)),]}
+\NormalTok{draft}\OperatorTok{$}\NormalTok{Pos[}\KeywordTok{which}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Pos }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{""}\NormalTok{,}\StringTok{"W"}\NormalTok{,}\StringTok{"F"}\NormalTok{))]=}\OtherTok{NA} \CommentTok{#replace blanks with NA}
+
+\CommentTok{#replace NA values in stats with 0}
+\NormalTok{draft}\OperatorTok{$}\NormalTok{GP[}\KeywordTok{is.na}\NormalTok{(draft}\OperatorTok{$}\NormalTok{GP)] <-}\DecValTok{0}
+\NormalTok{draft}\OperatorTok{$}\NormalTok{G[}\KeywordTok{is.na}\NormalTok{(draft}\OperatorTok{$}\NormalTok{G)] <-}\DecValTok{0} 
+\NormalTok{draft}\OperatorTok{$}\NormalTok{A[}\KeywordTok{is.na}\NormalTok{(draft}\OperatorTok{$}\NormalTok{A)] <-}\DecValTok{0} 
+\NormalTok{draft}\OperatorTok{$}\NormalTok{PTS[}\KeywordTok{is.na}\NormalTok{(draft}\OperatorTok{$}\NormalTok{PTS)] <-}\DecValTok{0} 
+\NormalTok{draft}\OperatorTok{$}\NormalTok{plus_minus[}\KeywordTok{is.na}\NormalTok{(draft}\OperatorTok{$}\NormalTok{plus_minus)] <-}\DecValTok{0} 
+\NormalTok{draft}\OperatorTok{$}\NormalTok{PIM[}\KeywordTok{is.na}\NormalTok{(draft}\OperatorTok{$}\NormalTok{PIM)] <-}\DecValTok{0} 
+
+\CommentTok{#replace POS that is blank with NI (no information) }
+\NormalTok{draft}\OperatorTok{$}\NormalTok{Pos <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Pos)}
+\NormalTok{draft}\OperatorTok{$}\NormalTok{Pos[}\KeywordTok{which}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Pos))] <-}\StringTok{ "unknown"}
+\NormalTok{draft}\OperatorTok{$}\NormalTok{Pos <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Pos)}
+
+\CommentTok{##################### import standings data ####################}
+\NormalTok{standings <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/potierku/talk_data_to_me/master/final_project/standings.csv"}\NormalTok{)}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team}\OperatorTok{==}\StringTok{"Anaheim Mighty Ducks"}\NormalTok{)]<-}\StringTok{ "Anaheim Ducks"}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team}\OperatorTok{==}\StringTok{"Phoenix Coyotes"}\NormalTok{)]<-}\StringTok{ "Arizona Coyotes"}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team}\OperatorTok{==}\StringTok{"Atlanta Thrashers"}\NormalTok{)]<-}\StringTok{ "Winnipeg Jets"}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team}\OperatorTok{==}\StringTok{"Quebec Nordiques"}\NormalTok{)]<-}\StringTok{ "Colorado Avalanche"}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team}\OperatorTok{==}\StringTok{"Hartford Whalers"}\NormalTok{)]<-}\StringTok{ "Carolina Hurricanes"}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team}\OperatorTok{==}\StringTok{"Minnesota North Stars"}\NormalTok{)]<-}\StringTok{ "Dallas Stars"}
+\NormalTok{standings <-}\StringTok{ }\NormalTok{standings[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team }\OperatorTok{!=}\StringTok{ "Vegas Golden Knights"}\NormalTok{),]}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team)}
+\NormalTok{standings}\OperatorTok{$}\NormalTok{Team <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team)}
+\KeywordTok{table}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##         Anaheim Ducks       Arizona Coyotes         Boston Bruins 
+##                    26                    23                    28 
+##        Buffalo Sabres        Calgary Flames   Carolina Hurricanes 
+##                    28                    28                    28 
+##    Chicago Blackhawks    Colorado Avalanche Columbus Blue Jackets 
+##                    28                    28                    19 
+##          Dallas Stars     Detroit Red Wings       Edmonton Oilers 
+##                    28                    28                    28 
+##      Florida Panthers     Los Angeles Kings        Minnesota Wild 
+##                    26                    28                    19 
+##    Montreal Canadiens   Nashville Predators     New Jersey Devils 
+##                    28                    21                    28 
+##    New York Islanders      New York Rangers       Ottawa Senators 
+##                    28                    28                    27 
+##   Philadelphia Flyers   Pittsburgh Penguins       San Jose Sharks 
+##                    28                    28                    28 
+##       St. Louis Blues   Tampa Bay Lightning   Toronto Maple Leafs 
+##                    28                    27                    28 
+##     Vancouver Canucks   Washington Capitals         Winnipeg Jets 
+##                    28                    28                    25
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{######################## import goalies data ##########################}
+\NormalTok{goalies <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/potierku/talk_data_to_me/master/final_project/goalies_data.csv"}\NormalTok{)}
+
+\CommentTok{############################# import skaters data ########################}
+\NormalTok{skaters <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/potierku/talk_data_to_me/master/final_project/skaters_data.csv"}\NormalTok{)}
+\NormalTok{skaters}\OperatorTok{$}\NormalTok{Pos[}\KeywordTok{which}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{Pos }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{""}\NormalTok{,}\StringTok{"W"}\NormalTok{,}\StringTok{"F"}\NormalTok{))]=}\OtherTok{NA} \CommentTok{#remove wrong positions}
+\NormalTok{skaters}\OperatorTok{$}\NormalTok{ATOI <-}\StringTok{ }\NormalTok{skaters}\OperatorTok{$}\NormalTok{TOI}\OperatorTok{/}\NormalTok{skaters}\OperatorTok{$}\NormalTok{GP}
+\NormalTok{skaters}\OperatorTok{$}\NormalTok{year_player <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{ï..Year,skaters}\OperatorTok{$}\NormalTok{Player)}
+\CommentTok{#this for loop is used to remove instances of a player being traded (whole season stats only)}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{year_player)))\{}
+  \ControlFlowTok{while}\NormalTok{ (}\KeywordTok{ifelse}\NormalTok{(i}\OperatorTok{<}\KeywordTok{length}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{year_player),skaters}\OperatorTok{$}\NormalTok{year_player[i]}\OperatorTok{==}\NormalTok{skaters}\OperatorTok{$}\NormalTok{year_player[i}\OperatorTok{+}\DecValTok{1}\NormalTok{],}\OtherTok{FALSE}\NormalTok{))\{}
+\NormalTok{    skaters<-skaters[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(i}\OperatorTok{+}\DecValTok{1}\NormalTok{),]}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{skaters}\OperatorTok{$}\NormalTok{Player <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{Player)}
+\CommentTok{#remove asterisks from skaters data}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{Player)))\{}
+\NormalTok{  skaters}\OperatorTok{$}\NormalTok{Player[i] <-(}\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{*"}\NormalTok{,}\StringTok{""}\NormalTok{,skaters}\OperatorTok{$}\NormalTok{Player[i]))}
+\NormalTok{\}}
+
+\CommentTok{######################### import city temps and years old ##########################}
+\NormalTok{temps <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/potierku/talk_data_to_me/master/final_project/NHL_city_temp_data.csv"}\NormalTok{)}
+
+\CommentTok{#################### creates 3 year draft results dataframe #####################}
+\NormalTok{draft_results <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{colnames}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Year"}\NormalTok{,}\StringTok{"Round"}\NormalTok{,}\StringTok{"Overall"}\NormalTok{,}\StringTok{"Team"}\NormalTok{,}\StringTok{"Player"}\NormalTok{,}\StringTok{"Nat."}\NormalTok{,}\StringTok{"POS"}\NormalTok{,}\StringTok{"Age"}\NormalTok{,}\StringTok{"To"}\NormalTok{,}\StringTok{"Amateur.Team"}\NormalTok{,}\StringTok{"Amateur.Lg"}\NormalTok{,}\StringTok{"GP"}\NormalTok{,}\StringTok{"G"}\NormalTok{,}\StringTok{"A"}\NormalTok{,}\StringTok{"PTS"}\NormalTok{,}\StringTok{"+_-"}\NormalTok{,}\StringTok{"PIM"}\NormalTok{)))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\StringTok{ }\NormalTok{(}\KeywordTok{length}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Player))))\{}
+\NormalTok{  df <-}\StringTok{ }\NormalTok{skaters[}\KeywordTok{which}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{Player) }\OperatorTok{==}\StringTok{ }\KeywordTok{as.character}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Player[i])),]}
+\NormalTok{  df <-}\StringTok{ }\NormalTok{df[}\KeywordTok{which}\NormalTok{(df}\OperatorTok{$}\NormalTok{GP}\OperatorTok{>}\DecValTok{10}\NormalTok{),]}
+\NormalTok{  df <-}\StringTok{ }\NormalTok{df[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{),]}
+\NormalTok{  numerics <-}\StringTok{ }\NormalTok{df[,}\KeywordTok{c}\NormalTok{(}\DecValTok{6}\OperatorTok{:}\DecValTok{11}\NormalTok{)]}
+  \CommentTok{#combine the first 3 years of numeric data from skaters with draft info and add}
+\NormalTok{  draft_results <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(draft_results,}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{c}\NormalTok{(draft[i,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{11}\NormalTok{)],}\KeywordTok{sapply}\NormalTok{(numerics,sum))))}
+\NormalTok{\}}
+\CommentTok{#sets na values to 0}
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{GP[}\KeywordTok{is.na}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{GP)] <-}\DecValTok{0}
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{G[}\KeywordTok{is.na}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{G)] <-}\DecValTok{0} 
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{A[}\KeywordTok{is.na}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{A)] <-}\DecValTok{0} 
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{PTS[}\KeywordTok{is.na}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{PTS)] <-}\DecValTok{0} 
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{X...[}\KeywordTok{is.na}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{X...)] <-}\DecValTok{0} 
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{PIM[}\KeywordTok{is.na}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{PIM)] <-}\DecValTok{0} 
+\CommentTok{#create column for NHL or not}
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{nhl <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{GP}\OperatorTok{>}\DecValTok{20}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{general-nhl-statistical-analysis}{%
+\subsubsection{General NHL Statistical
+Analysis}\label{general-nhl-statistical-analysis}}
+
+\hypertarget{predicting-skater-points-using-draft-position}{%
+\section{Predicting Skater Points Using Draft
+Position}\label{predicting-skater-points-using-draft-position}}
+
+In order to visualize the correlation between a player's overall draft
+pick spot and their points per game productivity, these variables were
+shown in a scatter plot. Additionally, a regression was ran that
+predicts the number of points a player will score per game with their a
+two degree polynomial of their overall draft position and a categorical
+variables of their position.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{draft}\OperatorTok{$}\NormalTok{ppgp <-}\StringTok{ }\NormalTok{draft}\OperatorTok{$}\NormalTok{PTS}\OperatorTok{/}\NormalTok{draft}\OperatorTok{$}\NormalTok{GP }\CommentTok{#created points per games player metric}
+\NormalTok{players <-}\StringTok{ }\NormalTok{draft[}\KeywordTok{which}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Pos}\OperatorTok{!=}\StringTok{'G'}\NormalTok{),] }\CommentTok{#excludes goalies and players who have played less than 10 games}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{players,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Overall, }\DataTypeTok{y=}\NormalTok{ppgp))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Points Per Game vs. Overall Pick Number"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Overall Pick Number"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Points Per Game"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"cm"}\NormalTok{),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{linetype =} \StringTok{'solid'}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"grey80"}\NormalTok{),}
+    \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family =} \StringTok{"Times"}\NormalTok{)}
+\NormalTok{    ) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,.}\DecValTok{25}\NormalTok{, }\FloatTok{.5}\NormalTok{, }\FloatTok{.75}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{1.25}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_markdown_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pts_overall <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(ppgp }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(Overall,}\DecValTok{2}\NormalTok{) }\OperatorTok{+}\StringTok{ }\NormalTok{Pos,}\DataTypeTok{data=}\NormalTok{players)}
+\KeywordTok{summary}\NormalTok{(pts_overall)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = ppgp ~ poly(Overall, 2) + Pos, data = players)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.43821 -0.14068 -0.02828  0.11404  0.89023 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        0.296916   0.007773  38.198  < 2e-16 ***
+## poly(Overall, 2)1 -2.448762   0.331716  -7.382 2.11e-13 ***
+## poly(Overall, 2)2  3.513196   0.319489  10.996  < 2e-16 ***
+## PosD              -0.110464   0.010131 -10.904  < 2e-16 ***
+## PosLW             -0.024640   0.011803  -2.088   0.0369 *  
+## PosRW             -0.013034   0.011755  -1.109   0.2676    
+## Posunknown         0.134242   0.089321   1.503   0.1330    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.199 on 2516 degrees of freedom
+##   (3139 observations deleted due to missingness)
+## Multiple R-squared:  0.1415, Adjusted R-squared:  0.1394 
+## F-statistic: 69.09 on 6 and 2516 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\hypertarget{peak-player-age-calculation}{%
+\section{Peak Player Age
+Calculation}\label{peak-player-age-calculation}}
+
+An often debated question in sports is whether to sign a free agent
+player. A key component of this is determining what that player's future
+production will be. To help determine this, points for a season were
+graphed against age. Additionally, a second degree polynomial was fitted
+to provide a numerical description of this curve. For this analysis,
+only players who had scored at least 20 points and were less than 40
+years old were used in order to focus on career NHL players and filter
+out players that were not able to produce at the NHL level. After doing
+this, it was found that the peak age of a player is 29.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#cut off at 20 Pts to exclude marginal players that may not have a full career}
+\NormalTok{peak_age_data <-}\StringTok{ }\NormalTok{skaters[}\KeywordTok{which}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{PTS}\OperatorTok{>}\DecValTok{20} \OperatorTok{&}\StringTok{ }\NormalTok{skaters}\OperatorTok{$}\NormalTok{Age }\OperatorTok{<}\DecValTok{40}\NormalTok{),]}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{peak_age_data,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Age, }\DataTypeTok{y=}\NormalTok{PTS))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{method=}\NormalTok{lm,}\DataTypeTok{se=}\OtherTok{TRUE}\NormalTok{,}\DataTypeTok{formula =}\NormalTok{ y}\OperatorTok{~}\KeywordTok{poly}\NormalTok{(x,}\DecValTok{2}\NormalTok{),}\DataTypeTok{colour =} \StringTok{"red"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}
+    \DataTypeTok{x =} \StringTok{"Age"}\NormalTok{,}
+    \DataTypeTok{y =} \StringTok{"Points"}\NormalTok{,}
+    \DataTypeTok{title =} \StringTok{"Player Peak Age in Terms of Season Points Total"}
+\NormalTok{  ) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"cm"}\NormalTok{),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{linetype =} \StringTok{'solid'}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"grey80"}\NormalTok{),}
+    \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family =} \StringTok{"Times"}\NormalTok{)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_markdown_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pts_age <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(PTS }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(Age,}\DecValTok{2}\NormalTok{,}\DataTypeTok{raw=}\OtherTok{TRUE}\NormalTok{),}\DataTypeTok{data=}\NormalTok{peak_age_data)}
+\KeywordTok{summary}\NormalTok{(pts_age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = PTS ~ poly(Age, 2, raw = TRUE), data = peak_age_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -22.543 -14.730  -4.730   9.993 117.465 
+## 
+## Coefficients:
+##                            Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)               18.996666   6.883215   2.760 0.005795 ** 
+## poly(Age, 2, raw = TRUE)1  1.672686   0.499186   3.351 0.000809 ***
+## poly(Age, 2, raw = TRUE)2 -0.028491   0.008903  -3.200 0.001379 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 18.87 on 8707 degrees of freedom
+## Multiple R-squared:  0.001533,   Adjusted R-squared:  0.001304 
+## F-statistic: 6.685 on 2 and 8707 DF,  p-value: 0.001256
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#took derivative of results to find age}
+\NormalTok{(peak_age <-}\StringTok{ }\NormalTok{((}\OperatorTok{-}\DecValTok{1}\NormalTok{)}\OperatorTok{*}\NormalTok{pts_age}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{pts_age}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{3}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## poly(Age, 2, raw = TRUE)1 
+##                  29.35416
+\end{verbatim}
+
+\hypertarget{points-vs.-average-time-on-ice}{%
+\section{Points vs.~Average Time on
+Ice}\label{points-vs.-average-time-on-ice}}
+
+Points versus the average time on ice was analyzed to see if playing a
+player too much could be detrimental to their performance. The
+visualizations were separated by position as some positions play more
+than others.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#average time on ice versus points plot}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{skaters[}\OperatorTok{-}\KeywordTok{which}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(skaters}\OperatorTok{$}\NormalTok{Pos)),],}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{ATOI, }\DataTypeTok{y=}\NormalTok{PTS))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ Pos), }\DataTypeTok{method=}\StringTok{"auto"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}
+    \DataTypeTok{x =} \StringTok{"Average Time on Ice (ATOI)"}\NormalTok{,}
+    \DataTypeTok{y =} \StringTok{"Points (Season Total)"}\NormalTok{,}
+    \DataTypeTok{title =} \StringTok{"Points vs. ATOI"}
+\NormalTok{  ) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{Pos, }\DataTypeTok{nrow =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"cm"}\NormalTok{),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{linetype =} \StringTok{'solid'}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"grey80"}\NormalTok{),}
+    \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family =} \StringTok{"Times"}\NormalTok{)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_markdown_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pts_atoi <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(PTS}\OperatorTok{~}\KeywordTok{poly}\NormalTok{(ATOI,}\DecValTok{2}\NormalTok{,}\DataTypeTok{raw=}\OtherTok{TRUE}\NormalTok{),}\DataTypeTok{data=}\NormalTok{skaters)}
+\KeywordTok{summary}\NormalTok{(pts_atoi)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = PTS ~ poly(ATOI, 2, raw = TRUE), data = skaters)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -50.703 -11.867  -1.930   8.251  94.635 
+## 
+## Coefficients:
+##                              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                -16.420523   0.906405 -18.116   <2e-16 ***
+## poly(ATOI, 2, raw = TRUE)1   2.410722   0.126498  19.057   <2e-16 ***
+## poly(ATOI, 2, raw = TRUE)2   0.004162   0.004202   0.991    0.322    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 16.86 on 17528 degrees of freedom
+##   (5262 observations deleted due to missingness)
+## Multiple R-squared:  0.3519, Adjusted R-squared:  0.3518 
+## F-statistic:  4759 on 2 and 17528 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\hypertarget{does-tanking-work}{%
+\subsection{Does Tanking Work?}\label{does-tanking-work}}
+
+Tanking is the idea that a team can improve its future years performance
+by doing poorly this year. The reasoning behind this is that doing
+poorly results in a team receiving higher overall draft selections. A
+counterpoint to this is that a losing culture does not attract talented
+free agents who want to win a Stanley Cup and or compete in the
+playoffs. To determine if tanking is actually an effective way to build
+a team, a linear regression was performed on every NHL team over its
+last 30 years.This regression predicted team points using the team
+points obtained in each of the previous 8 seasons. The coefficients of
+these regressions were then averaged and an equation for predicted team
+points was determined:
+
+\includegraphics[width=0.9\linewidth]{tanking_results}
+
+A visualization was then produced that shows the effect of each previous
+year on the current year's team points. Positive values show that it is
+helpful to do better in that year to increase points in the current
+year. Negative values show that it is helpful to do worse in that year
+to increase points in the current year. What the visualization shows is
+that tanking does work, but not immediately. A cycle of about 6 years
+seems to be what it takes for a ``rebuilding'' process that involves
+using tanking as a strategy. The 7th and 8th year had no significant
+effect and broke from the general trendline.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#regression to predict points in any given season, uses 5 lags of total team Points}
+\NormalTok{tanking <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(team)\{}
+\NormalTok{  team_data <-}\StringTok{ }\NormalTok{standings[}\KeywordTok{which}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team }\OperatorTok{==}\StringTok{ }\NormalTok{team),]}
+\NormalTok{  team_reg <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Pts }\OperatorTok{~}\StringTok{ }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{1L) }\OperatorTok{+}\StringTok{ }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{2L) }\OperatorTok{+}\StringTok{ }
+\StringTok{                 }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{3L)}\OperatorTok{+}\StringTok{ }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{4L)}\OperatorTok{+}\StringTok{ }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{5L) }\OperatorTok{+}\StringTok{ }
+\StringTok{                   }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{6L) }\OperatorTok{+}\StringTok{ }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{7L) }\OperatorTok{+}\StringTok{ }\KeywordTok{lag}\NormalTok{(Pts,}\DataTypeTok{n=}\NormalTok{8L),}\DataTypeTok{data=}\NormalTok{team_data)}
+\NormalTok{  team_reg}\OperatorTok{$}\NormalTok{coefficients}
+\NormalTok{\}}
+\NormalTok{teams<-}\StringTok{ }\KeywordTok{unique}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team) }\CommentTok{#list of teams}
+\NormalTok{tanking_results <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(teams,tanking)) }\CommentTok{#list apply}
+\NormalTok{tanking_results <-}\StringTok{ }\KeywordTok{t}\NormalTok{(tanking_results) }\CommentTok{#transpose results}
+\KeywordTok{colnames}\NormalTok{(tanking_results)<-}\KeywordTok{c}\NormalTok{(}\StringTok{"intercept"}\NormalTok{,}\StringTok{"lag1"}\NormalTok{,}\StringTok{"lag2"}\NormalTok{,}\StringTok{"lag3"}\NormalTok{,}\StringTok{"lag4"}\NormalTok{,}\StringTok{"lag5"}\NormalTok{,}\StringTok{"lag6"}\NormalTok{,}\StringTok{"lag7"}\NormalTok{,}\StringTok{"lag8"}\NormalTok{)}
+\NormalTok{tanking_results <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(tanking_results) }\CommentTok{#had issue with atomic vectors}
+\NormalTok{tanking_results_stats <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{t}\NormalTok{(}\KeywordTok{mapply}\NormalTok{(MeanCI,tanking_results,}\DataTypeTok{conf.level=}\NormalTok{.}\DecValTok{8}\NormalTok{)))}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{tanking_results_stats[}\DecValTok{2}\OperatorTok{:}\KeywordTok{length}\NormalTok{(tanking_results_stats}\OperatorTok{$}\NormalTok{mean),],}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{(}\KeywordTok{length}\NormalTok{(tanking_results_stats}\OperatorTok{$}\NormalTok{mean)}\OperatorTok{-}\DecValTok{1}\NormalTok{)),}\DataTypeTok{y=}\NormalTok{mean))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_errorbar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{ymin=}\NormalTok{lwr.ci,}\DataTypeTok{ymax=}\NormalTok{upr.ci),}\DataTypeTok{width=}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Effect of Previous Year's Team Points on This Year"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{breaks=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{(}\KeywordTok{length}\NormalTok{(tanking_results_stats}\OperatorTok{$}\NormalTok{mean)}\OperatorTok{-}\DecValTok{1}\NormalTok{)))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Number of Years Ago"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Mean with 80% Confidence Interval"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"cm"}\NormalTok{),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{linetype =} \StringTok{'solid'}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"grey80"}\NormalTok{),}
+    \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family =} \StringTok{"Times"}\NormalTok{)}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_markdown_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\hypertarget{does-city-temperature-and-organization-age-matter}{%
+\subsection{Does City Temperature and Organization Age
+Matter?}\label{does-city-temperature-and-organization-age-matter}}
+
+In order to determine if there were other effects that influence a
+team's performance, the temperature of the city in which the team plays
+and the number of years old a team is were used as predictors of team
+points. The results found that temperature was not a significant effect,
+but the number of years old was. This relationship was then visualized.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#figures out if temperatures and if when the team was founded matter}
+\NormalTok{ standings}\OperatorTok{$}\NormalTok{Team <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team)}
+\NormalTok{ temps}\OperatorTok{$}\NormalTok{ï..Team <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(temps}\OperatorTok{$}\NormalTok{ï..Team)}
+ \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team)))\{}
+\NormalTok{   standings}\OperatorTok{$}\NormalTok{temps[i] <-}\StringTok{ }\NormalTok{temps}\OperatorTok{$}\NormalTok{High.F.Avg[}\KeywordTok{which}\NormalTok{(temps}\OperatorTok{$}\NormalTok{ï..Team}\OperatorTok{==}\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[i])]}
+\NormalTok{ \}}
+ 
+ \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(standings}\OperatorTok{$}\NormalTok{Team)))\{}
+\NormalTok{   standings}\OperatorTok{$}\NormalTok{legacy[i] <-}\StringTok{ }\NormalTok{(standings}\OperatorTok{$}\NormalTok{ï..year[i] }\OperatorTok{-}\StringTok{ }\NormalTok{temps}\OperatorTok{$}\NormalTok{Year.Founded[}\KeywordTok{which}\NormalTok{(temps}\OperatorTok{$}\NormalTok{ï..Team}\OperatorTok{==}\NormalTok{standings}\OperatorTok{$}\NormalTok{Team[i])])}
+\NormalTok{ \}}
+ \KeywordTok{summary}\NormalTok{(}\KeywordTok{lm}\NormalTok{(Pts }\OperatorTok{~}\StringTok{ }\NormalTok{temps }\OperatorTok{+}\StringTok{ }\NormalTok{legacy, }\DataTypeTok{data =}\NormalTok{ standings))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Pts ~ temps + legacy, data = standings)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -56.882 -11.532   2.631  12.646  43.057 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 75.80270    4.52811  16.740  < 2e-16 ***
+## temps        0.06969    0.06374   1.093    0.275    
+## legacy       0.13175    0.02541   5.186 2.73e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 17.78 on 798 degrees of freedom
+## Multiple R-squared:  0.03328,    Adjusted R-squared:  0.03085 
+## F-statistic: 13.73 on 2 and 798 DF,  p-value: 1.366e-06
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+ \CommentTok{#train function in caret and cross validation}
+ 
+ \CommentTok{#plot average, case study recent champions, add confidence intervals}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{standings,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{legacy,}\DataTypeTok{y=}\NormalTok{Pts))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Effect of a Team's Legacy on its Performance"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Number of Years Old"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Team POints"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"cm"}\NormalTok{),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{linetype =} \StringTok{'solid'}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"grey80"}\NormalTok{),}
+    \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family =} \StringTok{"Times"}\NormalTok{)}
+\NormalTok{    )}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"lm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_markdown_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\hypertarget{prediction-of-points-in-first-three-years-in-the-nhl-based-on-draft-position}{%
+\subsection{Prediction of Points in First Three Years in the NHL Based
+on Draft
+Position}\label{prediction-of-points-in-first-three-years-in-the-nhl-based-on-draft-position}}
+
+Valuing draft picks is complicated. For this analysis it was chosen to
+look at their production during their entry level contracts. This
+contract activates once a player plays at least 9 games in an nhl
+season. A player can be kept in minor leagues for a couple years and
+then brough up to the NHL and the 3 years begins at this time. To see
+what production can be expected from a draft pick, a regression using
+the 4th degree polynomial of overall pick number was used as a predictor
+for points. A knn regression was also tried. Root mean squared error for
+both types of regressions was similar, so the results of the polynomial
+regression are shown.
+
+\includegraphics[width=0.9\linewidth]{draft_predictor}
+
+This was then visualized by position. The unknown plot generally refers
+to a player that never made it to the nhl but does not include all
+players that did not make it to the NHL. For this reason, position was
+not used as a predictor here.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#functions to get the rmse of the }
+\NormalTok{rmse =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(actual, predicted) \{}
+  \KeywordTok{sqrt}\NormalTok{(}\KeywordTok{mean}\NormalTok{((actual }\OperatorTok{-}\StringTok{ }\NormalTok{predicted) }\OperatorTok{^}\StringTok{ }\DecValTok{2}\NormalTok{))}
+\NormalTok{\}}
+\NormalTok{get_rmse =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(model, data, response) \{}
+  \KeywordTok{rmse}\NormalTok{(}\DataTypeTok{actual =} \KeywordTok{subset}\NormalTok{(data, }\DataTypeTok{select =}\NormalTok{ response, }\DataTypeTok{drop =} \OtherTok{TRUE}\NormalTok{),}
+       \DataTypeTok{predicted =} \KeywordTok{predict}\NormalTok{(model, data))}
+\NormalTok{\}}
+\NormalTok{draft_results_skaters <-}\StringTok{ }\NormalTok{draft_results[}\KeywordTok{which}\NormalTok{(draft}\OperatorTok{$}\NormalTok{Pos}\OperatorTok{!=}\StringTok{'G'}\NormalTok{),]}
+\NormalTok{draft_results_skaters}\OperatorTok{$}\NormalTok{Pos <-}\StringTok{ }\KeywordTok{droplevels}\NormalTok{(draft_results_skaters}\OperatorTok{$}\NormalTok{Pos)}
+
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{draft_results_skaters,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Overall, }\DataTypeTok{y=}\NormalTok{PTS))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ Pos), }\DataTypeTok{method=}\StringTok{"auto"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{Pos, }\DataTypeTok{nrow =} \DecValTok{1}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Points after 3 years in the NHL"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"cm"}\NormalTok{),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{linetype =} \StringTok{'solid'}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"grey80"}\NormalTok{),}
+    \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family =} \StringTok{"Times"}\NormalTok{)}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_markdown_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#creating test and train datasets}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+\NormalTok{draft_results_skaters_idx =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(draft_results_skaters), }\KeywordTok{round}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(draft_results_skaters) }\OperatorTok{/}\StringTok{ }\DecValTok{2}\NormalTok{))}
+\NormalTok{draft_results_skaters_train =}\StringTok{ }\NormalTok{draft_results_skaters[draft_results_skaters_idx, ]}
+\NormalTok{draft_results_skaters_test =}\StringTok{ }\NormalTok{draft_results_skaters[}\OperatorTok{-}\NormalTok{draft_results_skaters_idx, ]}
+
+\CommentTok{#using a polynomial to predict points based on overall position}
+\NormalTok{rmse_results_poly <-}\StringTok{ }\KeywordTok{c}\NormalTok{()}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{))\{}
+\NormalTok{  poly_model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(PTS }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(Overall,i,}\DataTypeTok{raw=}\OtherTok{TRUE}\NormalTok{),}\DataTypeTok{data=}\NormalTok{draft_results_skaters_train)}
+\NormalTok{  rmse_results_poly[i] <-}\StringTok{ }\KeywordTok{get_rmse}\NormalTok{(poly_model,draft_results_skaters_test,}\DataTypeTok{response=}\StringTok{"PTS"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{optimal_poly <-}\StringTok{ }\KeywordTok{which}\NormalTok{(rmse_results_poly}\OperatorTok{==}\KeywordTok{min}\NormalTok{(rmse_results_poly)) }\CommentTok{#which polynomial finds the best fit}
+\KeywordTok{summary}\NormalTok{(}\KeywordTok{lm}\NormalTok{(PTS }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(Overall,optimal_poly,}\DataTypeTok{raw=}\OtherTok{TRUE}\NormalTok{),}\DataTypeTok{data=}\NormalTok{draft_results_skaters))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = PTS ~ poly(Overall, optimal_poly, raw = TRUE), data = draft_results_skaters)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -77.211  -9.018  -7.364  -2.674 228.500 
+## 
+## Coefficients:
+##                                            Estimate Std. Error t value
+## (Intercept)                               8.371e+01  1.887e+00   44.37
+## poly(Overall, optimal_poly, raw = TRUE)1 -2.236e+00  9.353e-02  -23.90
+## poly(Overall, optimal_poly, raw = TRUE)2  2.310e-02  1.360e-03   16.98
+## poly(Overall, optimal_poly, raw = TRUE)3 -9.911e-05  7.311e-06  -13.56
+## poly(Overall, optimal_poly, raw = TRUE)4  1.491e-07  1.295e-08   11.51
+##                                          Pr(>|t|)    
+## (Intercept)                                <2e-16 ***
+## poly(Overall, optimal_poly, raw = TRUE)1   <2e-16 ***
+## poly(Overall, optimal_poly, raw = TRUE)2   <2e-16 ***
+## poly(Overall, optimal_poly, raw = TRUE)3   <2e-16 ***
+## poly(Overall, optimal_poly, raw = TRUE)4   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 29.99 on 5657 degrees of freedom
+## Multiple R-squared:  0.2447, Adjusted R-squared:  0.2441 
+## F-statistic: 458.1 on 4 and 5657 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#using knn to predict points based on overall position}
+\NormalTok{rmse_results_knn <-}\StringTok{ }\KeywordTok{c}\NormalTok{()}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{25}\NormalTok{))\{}
+\NormalTok{  draft_results_knn <-}\StringTok{ }\KeywordTok{knnreg}\NormalTok{(PTS }\OperatorTok{~}\StringTok{ }\NormalTok{Overall,draft_results_skaters_train,}\DataTypeTok{k=}\NormalTok{i)}
+\NormalTok{  rmse_results_knn[i] <-}\StringTok{ }\KeywordTok{get_rmse}\NormalTok{(draft_results_knn,draft_results_skaters_test,}\DataTypeTok{response =} \StringTok{"PTS"}\NormalTok{)}
+\NormalTok{\}}
+\KeywordTok{which}\NormalTok{(rmse_results_knn}\OperatorTok{==}\KeywordTok{min}\NormalTok{(rmse_results_knn)) }\CommentTok{#number of nearest neighbors that minimizes rmse}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 25
+\end{verbatim}
+
+\hypertarget{probability-of-making-nhl-by-draft-round}{%
+\subsection{Probability of Making NHL by Draft
+Round}\label{probability-of-making-nhl-by-draft-round}}
+
+The probability of making the NHL based upon the round a player is
+drafted in. The threshold for this was playing at least 20 games in the
+NHL.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#use lm to predict if play in NHL or not}
+\KeywordTok{summary}\NormalTok{(}\KeywordTok{lm}\NormalTok{(nhl}\OperatorTok{~}\KeywordTok{poly}\NormalTok{(Overall,}\DecValTok{2}\NormalTok{,}\DataTypeTok{raw=}\OtherTok{TRUE}\NormalTok{) }\OperatorTok{+}\StringTok{ }\NormalTok{Pos }\OperatorTok{+}\StringTok{ }\NormalTok{Age, }\DataTypeTok{data=}\NormalTok{draft_results))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = nhl ~ poly(Overall, 2, raw = TRUE) + Pos + Age, 
+##     data = draft_results)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.7903 -0.2789 -0.1644  0.3427  0.8701 
+## 
+## Coefficients:
+##                                 Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                    3.908e-01  8.462e-02   4.619 3.96e-06 ***
+## poly(Overall, 2, raw = TRUE)1 -6.268e-03  2.895e-04 -21.654  < 2e-16 ***
+## poly(Overall, 2, raw = TRUE)2  1.655e-05  1.098e-06  15.083  < 2e-16 ***
+## PosD                          -3.230e-02  1.633e-02  -1.978   0.0480 *  
+## PosG                          -3.199e-01  2.254e-02 -14.193  < 2e-16 ***
+## PosLW                         -3.117e-02  1.937e-02  -1.610   0.1075    
+## PosRW                         -9.407e-03  1.934e-02  -0.486   0.6267    
+## Posunknown                    -1.901e-01  8.364e-02  -2.273   0.0231 *  
+## Age                            2.026e-02  4.578e-03   4.425 9.88e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.4135 on 4654 degrees of freedom
+##   (1483 observations deleted due to missingness)
+## Multiple R-squared:  0.1974, Adjusted R-squared:  0.196 
+## F-statistic: 143.1 on 8 and 4654 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#odds of making the nhl based on round drafted}
+\CommentTok{#adjust for modern size of nhl}
+\NormalTok{draft_results}\OperatorTok{$}\NormalTok{Round_modern <-}\StringTok{ }\KeywordTok{trunc}\NormalTok{(}\DecValTok{1}\OperatorTok{+}\NormalTok{draft_results}\OperatorTok{$}\NormalTok{Overall}\OperatorTok{/}\DecValTok{31}\NormalTok{)}
+
+\NormalTok{round_probs <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{names}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"round"}\NormalTok{,}\StringTok{"chance"}\NormalTok{)))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{))\{}
+\NormalTok{  df <-}\StringTok{ }\NormalTok{draft_results[}\KeywordTok{which}\NormalTok{(draft_results}\OperatorTok{$}\NormalTok{Round_modern}\OperatorTok{==}\NormalTok{i),]}
+\NormalTok{  round_probs <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(round_probs,}\KeywordTok{c}\NormalTok{(}\KeywordTok{as.integer}\NormalTok{(i),}\KeywordTok{mean}\NormalTok{(df}\OperatorTok{$}\NormalTok{nhl)))}
+\NormalTok{\}}
+\KeywordTok{names}\NormalTok{(round_probs) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"round"}\NormalTok{,}\StringTok{"chance"}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{round_probs,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{round,}\DataTypeTok{y=}\NormalTok{chance))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{name=}\StringTok{"Round of Draft (31 team equivalent)"}\NormalTok{,}\DataTypeTok{breaks=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(round_probs}\OperatorTok{$}\NormalTok{round)))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{name=} \StringTok{"Chance of > 20 GP in NHL"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Chance of playing in the NHL"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"cm"}\NormalTok{),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{linetype =} \StringTok{'solid'}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"grey80"}\NormalTok{),}
+    \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family =} \StringTok{"Times"}\NormalTok{)}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_markdown_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\hypertarget{conclusion}{%
+\subsection{Conclusion}\label{conclusion}}
+
+Overall, our analysis provided some useful general statistics about NHL
+player performance as well as showing that tanking can be a useful
+strategy to set a team up for future success. The expected production
+from a draft pick was determined.
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+\emph{NHL Data} \url{https://www.hockey-reference.com/}
+
+\url{http://www.nhl.com/stats/}
+
+
+\end{document}

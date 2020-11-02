@@ -1,0 +1,852 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Lab 3 Write-Up},
+            pdfauthor={Kurtis Potier, Nick Hiller, Zane Shango},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Lab 3 Write-Up}
+\author{Kurtis Potier, Nick Hiller, Zane Shango}
+\date{2/11/2020}
+
+\begin{document}
+\maketitle
+
+\hypertarget{exercise-1}{%
+\section{Exercise 1}\label{exercise-1}}
+
+\hypertarget{load-the-ames-data.-drop-the-variables-overallcond-and-overallqual.}{%
+\subsection{1. Load the Ames data. Drop the variables OverallCond and
+OverallQual.}\label{load-the-ames-data.-drop-the-variables-overallcond-and-overallqual.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(reshape2)}
+\CommentTok{#functions}
+\NormalTok{rmse =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(model)\{}
+  \KeywordTok{sqrt}\NormalTok{(}\KeywordTok{mean}\NormalTok{(}\KeywordTok{resid}\NormalTok{(model)}\OperatorTok{^}\DecValTok{2}\NormalTok{))}
+\NormalTok{\} }
+
+\NormalTok{get_complexity =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(model) \{}
+  \KeywordTok{length}\NormalTok{(}\KeywordTok{coef}\NormalTok{(model)) }\OperatorTok{-}\StringTok{ }\DecValTok{1}
+\NormalTok{\}}
+
+
+\NormalTok{ameslist <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{read.table}\NormalTok{(}\StringTok{"https://msudataanalytics.github.io/SSC442/Labs/data/ames.csv"}\NormalTok{,}\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{,}\DataTypeTok{sep =} \StringTok{","}\NormalTok{))}
+
+\CommentTok{#identifies columns with NA values}
+\NormalTok{na_cols <-}\StringTok{ }\KeywordTok{names}\NormalTok{(}\KeywordTok{which}\NormalTok{(}\KeywordTok{colSums}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(ameslist))}\OperatorTok{>}\DecValTok{0}\NormalTok{))}
+
+\CommentTok{#fixes for these columns}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{Alley <-}\StringTok{ }\KeywordTok{addNA}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{Alley) }\CommentTok{#lot is not on an alley}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{MasVnrType[}\KeywordTok{is.na}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{MasVnrType)] <-}\StringTok{ "None"} \CommentTok{#replace NA with None}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{MasVnrArea[}\KeywordTok{is.na}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{MasVnrArea)] <-}\StringTok{ }\DecValTok{0} \CommentTok{#replace NA with 0}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{Electrical <-}\StringTok{ }\KeywordTok{addNA}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{Electrical)}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{GarageType <-}\StringTok{ }\KeywordTok{addNA}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{GarageType)}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{GarageFinish <-}\StringTok{ }\KeywordTok{addNA}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{GarageFinish)}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{PoolQC <-}\StringTok{ }\KeywordTok{addNA}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{PoolQC)}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{Fence <-}\StringTok{ }\KeywordTok{addNA}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{Fence)}
+\NormalTok{ameslist}\OperatorTok{$}\NormalTok{MiscFeature <-}\StringTok{ }\KeywordTok{addNA}\NormalTok{(ameslist}\OperatorTok{$}\NormalTok{MiscFeature)}
+
+
+\CommentTok{#delete overallcond and overallqual}
+\CommentTok{#additionally, delete variables with unuseable NA (continuous variables that describe factor variables with y/n)}
+\NormalTok{ameslist <-}\StringTok{ }\KeywordTok{within}\NormalTok{(ameslist,}\KeywordTok{rm}\NormalTok{(}\StringTok{"OverallCond"}\NormalTok{,}\StringTok{"OverallQual"}\NormalTok{,}\StringTok{"LotFrontage"}\NormalTok{,}\StringTok{"BsmtQual"}\NormalTok{,}
+                               \StringTok{"BsmtCond"}\NormalTok{,}\StringTok{"BsmtExposure"}\NormalTok{,}\StringTok{"BsmtFinType1"}\NormalTok{,}\StringTok{"BsmtFinType2"}\NormalTok{,}\StringTok{"FireplaceQu"}\NormalTok{,}
+                               \StringTok{"GarageYrBlt"}\NormalTok{,}\StringTok{"GarageQual"}\NormalTok{,}\StringTok{"GarageCond"}\NormalTok{))}
+\KeywordTok{head}\NormalTok{(ameslist)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{using-forward-selectionsee-lecture-6-for-detailscreate-a-series-of-models-up-to-complexity-length-15.-you-may-use-all-variables-including-categorical-variables.}{%
+\subsection{2. Using forward selection---see Lecture 6 for
+details---create a series of models up to complexity length 15. You may
+use all variables, including categorical
+variables.}\label{using-forward-selectionsee-lecture-6-for-detailscreate-a-series-of-models-up-to-complexity-length-15.-you-may-use-all-variables-including-categorical-variables.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#forward selection}
+\CommentTok{#null model}
+\NormalTok{null_model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\OtherTok{NULL}\NormalTok{,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#one variable}
+\NormalTok{rmse_lm1 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse1<-rmse_lm1[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm1 <-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#two variable}
+\NormalTok{rmse_lm2 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse2<-rmse_lm2[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm2 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#three variable}
+\NormalTok{rmse_lm3 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse3<-rmse_lm3[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm3 <-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea,}\DataTypeTok{data=}\NormalTok{ameslist) }
+  
+\CommentTok{#four variable}
+\NormalTok{rmse_lm4 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse4<-rmse_lm4[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm4 <-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#five variable}
+\NormalTok{rmse_lm5 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse5<-rmse_lm5[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm5 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#six variable}
+\NormalTok{rmse_lm6 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse6<-rmse_lm6[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm6 <-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#seven variable}
+\NormalTok{rmse_lm7 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse7<-rmse_lm7[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm7<-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#eight variable}
+\NormalTok{rmse_lm8 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse8<-rmse_lm8[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm8<-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}\NormalTok{BldgType,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#nine variable}
+\NormalTok{rmse_lm9 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{BldgType}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse9<-rmse_lm9[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm9<-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}\NormalTok{BldgType}\OperatorTok{+}
+\StringTok{          }\NormalTok{ExterQual,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#ten variable}
+\NormalTok{rmse_lm10 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}
+\StringTok{                                                            }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse10<-rmse_lm10[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm10<-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{           }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#elven variable}
+\NormalTok{rmse_lm11 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse11<-rmse_lm11[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm11<-}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{           }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#twelve variable}
+\NormalTok{rmse_lm12 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse12<-rmse_lm12[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm12<-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{            }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}\NormalTok{Functional,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#thirteen variable}
+\NormalTok{rmse_lm13 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}\NormalTok{Functional}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse13<-rmse_lm13[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm13 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}\NormalTok{Functional}\OperatorTok{+}\NormalTok{SaleCondition,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#fourteen variable}
+\NormalTok{rmse_lm14 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}\NormalTok{Functional}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{SaleCondition}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse14<-rmse_lm14[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm14 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}\NormalTok{Functional}\OperatorTok{+}\NormalTok{SaleCondition}\OperatorTok{+}\NormalTok{LotArea,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\CommentTok{#fifteen variable}
+\NormalTok{rmse_lm15 <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(ameslist,}\ControlFlowTok{function}\NormalTok{(column) }\KeywordTok{rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}\NormalTok{Functional}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{SaleCondition}\OperatorTok{+}\NormalTok{LotArea}\OperatorTok{+}
+\StringTok{                                                             }\NormalTok{column,}\DataTypeTok{data=}\NormalTok{ameslist))))}
+\NormalTok{rmse15<-rmse_lm15[}\DecValTok{2}\NormalTok{]}
+\NormalTok{lm15 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{Alley}\OperatorTok{+}\NormalTok{Neighborhood}\OperatorTok{+}\NormalTok{GrLivArea}\OperatorTok{+}\NormalTok{KitchenQual}\OperatorTok{+}\NormalTok{RoofMatl}\OperatorTok{+}\NormalTok{TotalBsmtSF}\OperatorTok{+}\NormalTok{BsmtFinSF1}\OperatorTok{+}
+\StringTok{             }\NormalTok{BldgType}\OperatorTok{+}\NormalTok{ExterQual}\OperatorTok{+}\NormalTok{Condition2}\OperatorTok{+}\NormalTok{YearBuilt}\OperatorTok{+}\NormalTok{Functional}\OperatorTok{+}\NormalTok{SaleCondition}\OperatorTok{+}\NormalTok{LotArea}\OperatorTok{+}\NormalTok{GarageCars,}\DataTypeTok{data=}\NormalTok{ameslist)}
+
+\NormalTok{rmse_all <-}\StringTok{ }\KeywordTok{c}\NormalTok{(rmse1,rmse2,rmse3,rmse4,rmse5,rmse6,rmse7,rmse8,rmse9,rmse10,rmse11,rmse12,rmse13,rmse14,rmse15)}
+\NormalTok{lm_all <-}\StringTok{ }\KeywordTok{c}\NormalTok{(lm1,lm2,lm3,lm4,lm5,lm6,lm7,lm8,lm9,lm10,lm11,lm12,lm13,lm14,lm15)}
+\NormalTok{rmse_complex <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{15}\NormalTok{)}
+\NormalTok{rmse_df <-}\KeywordTok{data.frame}\NormalTok{(rmse_all,rmse_complex)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{create-a-chart-plotting-the-model-complexity-as-the-xx-axis-variable-and-rmse-as-the-yy-axis-variable.}{%
+\subsection{3. Create a chart plotting the model complexity as the
+xx-axis variable and RMSE as the yy-axis
+variable.}\label{create-a-chart-plotting-the-model-complexity-as-the-xx-axis-variable-and-rmse-as-the-yy-axis-variable.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(rmse_df,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{rmse_complex,}\DataTypeTok{y=}\NormalTok{rmse_all))}\OperatorTok{+}\KeywordTok{ylab}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{)}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"RMSE vs. Model Complexity"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{scale_x_continuous}\NormalTok{((}\StringTok{"Model Complexity"}\NormalTok{),}\DataTypeTok{labels=}\NormalTok{rmse_complex,}\DataTypeTok{breaks=}\NormalTok{rmse_complex)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust=}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{lab3_write_up_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+As the complexity of the model increases the RMSE value seems to
+decrease, with a weird result for complexity level 2. We think we should
+use the full size model, because it minimizes the RMSE.
+
+\hypertarget{exercise-2}{%
+\section{Exercise 2}\label{exercise-2}}
+
+\hypertarget{plot-the-train-and-test-rmse-for-the-15-models-you-fit-in-exercise-1.}{%
+\subsection{1. Plot the Train and Test RMSE for the 15 models you fit in
+Exercise
+1.}\label{plot-the-train-and-test-rmse-for-the-15-models-you-fit-in-exercise-1.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rmse_pred <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(actual, predicted) \{}
+  \KeywordTok{sqrt}\NormalTok{(}\KeywordTok{mean}\NormalTok{((actual }\OperatorTok{-}\StringTok{ }\NormalTok{predicted) }\OperatorTok{^}\StringTok{ }\DecValTok{2}\NormalTok{))}
+\NormalTok{\}}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{9}\NormalTok{)}
+\NormalTok{num_obs <-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(ameslist)}
+
+\NormalTok{train_index <-}\StringTok{ }\KeywordTok{sample}\NormalTok{(num_obs, }\DataTypeTok{size =} \KeywordTok{trunc}\NormalTok{(}\FloatTok{0.50} \OperatorTok{*}\StringTok{ }\NormalTok{num_obs))}
+\NormalTok{train_data <-}\StringTok{ }\NormalTok{ameslist[train_index, ]}
+\NormalTok{test_data <-}\StringTok{ }\NormalTok{ameslist[}\OperatorTok{-}\NormalTok{train_index, ]}
+
+\NormalTok{fit_}\DecValTok{0}\NormalTok{ =}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice }\OperatorTok{~}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ train_data)}
+\KeywordTok{get_complexity}\NormalTok{(fit_}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#simplified function as SalePrice is the only response variable for this exercise}
+\NormalTok{get_rmse =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(model, data) \{}
+  \KeywordTok{rmse_pred}\NormalTok{(}\DataTypeTok{actual =} \KeywordTok{subset}\NormalTok{(data, }\DataTypeTok{select =} \StringTok{"SalePrice"}\NormalTok{, }\DataTypeTok{drop =} \OtherTok{TRUE}\NormalTok{),}
+       \DataTypeTok{predicted =} \KeywordTok{predict}\NormalTok{(model, data))}
+\NormalTok{\}}
+
+\KeywordTok{get_rmse}\NormalTok{(}\DataTypeTok{model =}\NormalTok{ fit_}\DecValTok{0}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ train_data) }\CommentTok{# train RMSE}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 80875.98
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_rmse}\NormalTok{(}\DataTypeTok{model =}\NormalTok{ fit_}\DecValTok{0}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ test_data) }\CommentTok{# test RMSE}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 77928.62
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rmse_train <-}\KeywordTok{c}\NormalTok{(}\KeywordTok{get_rmse}\NormalTok{(lm1,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm2,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm3,train_data),}
+               \KeywordTok{get_rmse}\NormalTok{(lm4,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm5,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm6,train_data),}
+               \KeywordTok{get_rmse}\NormalTok{(lm7,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm8,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm9,train_data),}
+               \KeywordTok{get_rmse}\NormalTok{(lm10,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm11,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm12,train_data),}
+               \KeywordTok{get_rmse}\NormalTok{(lm13,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm14,train_data),}\KeywordTok{get_rmse}\NormalTok{(lm15,train_data))}
+\NormalTok{rmse_test <-}\KeywordTok{c}\NormalTok{(}\KeywordTok{get_rmse}\NormalTok{(lm1,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm2,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm3,test_data),}
+              \KeywordTok{get_rmse}\NormalTok{(lm4,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm5,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm6,test_data),}
+              \KeywordTok{get_rmse}\NormalTok{(lm7,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm8,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm9,test_data),}
+              \KeywordTok{get_rmse}\NormalTok{(lm10,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm11,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm12,test_data),}
+              \KeywordTok{get_rmse}\NormalTok{(lm13,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm14,test_data),}\KeywordTok{get_rmse}\NormalTok{(lm15,test_data))}
+\NormalTok{rmse_df_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(rmse_train,rmse_test,rmse_complex)}
+\NormalTok{rmse_df_}\DecValTok{2}\NormalTok{_melted <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(rmse_df_}\DecValTok{2}\NormalTok{,}\DataTypeTok{id=}\StringTok{"rmse_complex"}\NormalTok{)}
+
+
+\KeywordTok{ggplot}\NormalTok{(rmse_df_}\DecValTok{2}\NormalTok{_melted,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{rmse_complex,}\DataTypeTok{y=}\NormalTok{value,}\DataTypeTok{color=}\NormalTok{variable))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"RMSE vs. Model Complexity"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{((}\StringTok{"Model Complexity"}\NormalTok{),}\DataTypeTok{labels=}\NormalTok{rmse_complex,}\DataTypeTok{breaks=}\NormalTok{rmse_complex)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{hjust=}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{lab3_write_up_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\hypertarget{this-question-is-the-most-time-consuming-question.-using-any-method-you-choose-and-any-number-of-regressors-predict-saleprice.-calculate-the-train-and-test-rmse.}{%
+\subsection{2. This question is the most time-consuming question. Using
+any method you choose and any number of regressors, predict SalePrice.
+Calculate the Train and Test
+RMSE.}\label{this-question-is-the-most-time-consuming-question.-using-any-method-you-choose-and-any-number-of-regressors-predict-saleprice.-calculate-the-train-and-test-rmse.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{optimizer <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(var)\{}
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{class}\NormalTok{(var) }\OperatorTok{==}\StringTok{ "integer"}\NormalTok{)\{}
+\NormalTok{    linear_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{var,}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+\NormalTok{    x2_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{(var}\OperatorTok{^}\DecValTok{2}\NormalTok{),}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+    \KeywordTok{ifelse}\NormalTok{((}\KeywordTok{min}\NormalTok{(var)}\OperatorTok{>}\DecValTok{0}\NormalTok{),ln_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\KeywordTok{log}\NormalTok{(var),}\DataTypeTok{data=}\NormalTok{train_data),train_data),ln_rmse<-}\DecValTok{99999999}\NormalTok{)}
+\NormalTok{    recip_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{var),}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+\NormalTok{    power_.}\DecValTok{2}\NormalTok{_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\KeywordTok{I}\NormalTok{(var}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{),}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+\NormalTok{    power_.}\DecValTok{4}\NormalTok{_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\KeywordTok{I}\NormalTok{(var}\OperatorTok{^}\NormalTok{.}\DecValTok{4}\NormalTok{),}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+\NormalTok{    power_.}\DecValTok{5}\NormalTok{_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\KeywordTok{I}\NormalTok{(var}\OperatorTok{^}\NormalTok{.}\DecValTok{5}\NormalTok{),}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+\NormalTok{    power_.}\DecValTok{6}\NormalTok{_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\KeywordTok{I}\NormalTok{(var}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{),}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+\NormalTok{    power_.}\DecValTok{8}\NormalTok{_rmse<-}\KeywordTok{get_rmse}\NormalTok{(}\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\KeywordTok{I}\NormalTok{(var}\OperatorTok{^}\NormalTok{.}\DecValTok{8}\NormalTok{),}\DataTypeTok{data=}\NormalTok{train_data),train_data)}
+    \CommentTok{#vector of results}
+\NormalTok{    rmse_comp<-}\KeywordTok{c}\NormalTok{(linear_rmse,x2_rmse,ln_rmse,recip_rmse,power_.}\DecValTok{2}\NormalTok{_rmse,}
+\NormalTok{                 power_.}\DecValTok{4}\NormalTok{_rmse,power_.}\DecValTok{5}\NormalTok{_rmse,power_.}\DecValTok{6}\NormalTok{_rmse,power_.}\DecValTok{8}\NormalTok{_rmse)}
+    \KeywordTok{names}\NormalTok{(rmse_comp) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"linear"}\NormalTok{,}\StringTok{"x^2"}\NormalTok{,}\StringTok{"ln"}\NormalTok{,}\StringTok{"reciprocal"}\NormalTok{,}\StringTok{"power_.2_rmse"}\NormalTok{,}\StringTok{"power_.4_rmse"}\NormalTok{,}
+                          \StringTok{"power_.5_rmse"}\NormalTok{,}\StringTok{"power_.6_rmse"}\NormalTok{,}\StringTok{"power_.8_rmse"}\NormalTok{)}
+\NormalTok{    rmse_comp[}\KeywordTok{which.min}\NormalTok{(rmse_comp)]}
+\NormalTok{  \}}
+\NormalTok{\}}
+\CommentTok{#applies the optimization function to determine the best transformation}
+\KeywordTok{sapply}\NormalTok{(train_data,optimizer)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $Id
+## power_.2_rmse 
+##      80815.88 
+## 
+## $MSSubClass
+##   linear 
+## 80682.55 
+## 
+## $MSZoning
+## NULL
+## 
+## $LotArea
+## power_.2_rmse 
+##      74575.93 
+## 
+## $Street
+## NULL
+## 
+## $Alley
+## NULL
+## 
+## $LotShape
+## NULL
+## 
+## $LandContour
+## NULL
+## 
+## $Utilities
+## NULL
+## 
+## $LotConfig
+## NULL
+## 
+## $LandSlope
+## NULL
+## 
+## $Neighborhood
+## NULL
+## 
+## $Condition1
+## NULL
+## 
+## $Condition2
+## NULL
+## 
+## $BldgType
+## NULL
+## 
+## $HouseStyle
+## NULL
+## 
+## $YearBuilt
+##   linear 
+## 68699.42 
+## 
+## $YearRemodAdd
+##  linear 
+## 69196.8 
+## 
+## $RoofStyle
+## NULL
+## 
+## $RoofMatl
+## NULL
+## 
+## $Exterior1st
+## NULL
+## 
+## $Exterior2nd
+## NULL
+## 
+## $MasVnrType
+## NULL
+## 
+## $MasVnrArea
+## NULL
+## 
+## $ExterQual
+## NULL
+## 
+## $ExterCond
+## NULL
+## 
+## $Foundation
+## NULL
+## 
+## $BsmtFinSF1
+##   linear 
+## 75023.28 
+## 
+## $BsmtFinSF2
+## power_.2_rmse 
+##       80758.9 
+## 
+## $BsmtUnfSF
+##  linear 
+## 79401.7 
+## 
+## $TotalBsmtSF
+## power_.8_rmse 
+##      65914.75 
+## 
+## $Heating
+## NULL
+## 
+## $HeatingQC
+## NULL
+## 
+## $CentralAir
+## NULL
+## 
+## $Electrical
+## NULL
+## 
+## $X1stFlrSF
+## power_.6_rmse 
+##      64880.14 
+## 
+## $X2ndFlrSF
+##   linear 
+## 76366.74 
+## 
+## $LowQualFinSF
+## power_.2_rmse 
+##      80673.22 
+## 
+## $GrLivArea
+## power_.6_rmse 
+##      57968.43 
+## 
+## $BsmtFullBath
+## power_.2_rmse 
+##      78517.82 
+## 
+## $BsmtHalfBath
+## power_.2_rmse 
+##      80871.28 
+## 
+## $FullBath
+##   linear 
+## 64897.25 
+## 
+## $HalfBath
+## power_.2_rmse 
+##       77091.4 
+## 
+## $BedroomAbvGr
+##  linear 
+## 79573.2 
+## 
+## $KitchenAbvGr
+##       ln 
+## 80061.97 
+## 
+## $KitchenQual
+## NULL
+## 
+## $TotRmsAbvGrd
+##   linear 
+## 68743.86 
+## 
+## $Functional
+## NULL
+## 
+## $Fireplaces
+## power_.6_rmse 
+##      71137.62 
+## 
+## $GarageType
+## NULL
+## 
+## $GarageFinish
+## NULL
+## 
+## $GarageCars
+##   linear 
+## 62451.04 
+## 
+## $GarageArea
+##   linear 
+## 64535.09 
+## 
+## $PavedDrive
+## NULL
+## 
+## $WoodDeckSF
+## power_.6_rmse 
+##      76568.33 
+## 
+## $OpenPorchSF
+## power_.2_rmse 
+##      73726.23 
+## 
+## $EnclosedPorch
+## power_.2_rmse 
+##      79301.58 
+## 
+## $X3SsnPorch
+##   linear 
+## 80674.51 
+## 
+## $ScreenPorch
+## power_.6_rmse 
+##      80169.54 
+## 
+## $PoolArea
+## power_.2_rmse 
+##      80267.39 
+## 
+## $PoolQC
+## NULL
+## 
+## $Fence
+## NULL
+## 
+## $MiscFeature
+## NULL
+## 
+## $MiscVal
+## power_.2_rmse 
+##      80786.35 
+## 
+## $MoSold
+## power_.8_rmse 
+##      80752.77 
+## 
+## $YrSold
+##       ln 
+## 80872.48 
+## 
+## $SaleType
+## NULL
+## 
+## $SaleCondition
+## NULL
+## 
+## $SalePrice
+##       linear 
+## 2.190679e-10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#all the variables in a linear regression}
+\NormalTok{benchmark_lm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{.,}\DataTypeTok{data=}\NormalTok{train_data)}
+\KeywordTok{get_rmse}\NormalTok{(benchmark_lm,train_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in predict.lm(model, data): prediction from a rank-deficient fit may be
+## misleading
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 20314.17
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#knocked out variables that cause errors, linear, used as a benchmark}
+\NormalTok{benchmark_simple <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{(MSSubClass)}\OperatorTok{+}\NormalTok{(MSZoning)}\OperatorTok{+}\KeywordTok{log}\NormalTok{(LotArea)}\OperatorTok{+}\StringTok{ }\NormalTok{(Street)}\OperatorTok{+}\NormalTok{(Alley)}\OperatorTok{+}\NormalTok{(LotShape)}\OperatorTok{+}\NormalTok{(LandContour)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(Utilities)}\OperatorTok{+}\NormalTok{(LotConfig)}\OperatorTok{+}\NormalTok{(LandSlope)}\OperatorTok{+}\NormalTok{(Condition1)}\OperatorTok{+}\NormalTok{(BldgType)}\OperatorTok{+}\NormalTok{(HouseStyle)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(YearBuilt)}\OperatorTok{+}\NormalTok{(YearRemodAdd)}\OperatorTok{+}\NormalTok{(RoofStyle)}\OperatorTok{+}\NormalTok{(MasVnrType)}\OperatorTok{+}\NormalTok{(MasVnrArea)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(ExterQual)}\OperatorTok{+}\NormalTok{(Foundation)}\OperatorTok{+}\NormalTok{(BsmtFinSF1)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(BsmtFinSF2)}\OperatorTok{+}\NormalTok{(BsmtUnfSF)}\OperatorTok{+}\NormalTok{(TotalBsmtSF)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(HeatingQC)}\OperatorTok{+}\NormalTok{(CentralAir)}\OperatorTok{+}\NormalTok{(X1stFlrSF)}\OperatorTok{+}\NormalTok{(X2ndFlrSF)}\OperatorTok{+}\NormalTok{(LowQualFinSF)}\OperatorTok{+}\NormalTok{(GrLivArea)}\OperatorTok{+}\NormalTok{(BsmtFullBath)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(BsmtHalfBath)}\OperatorTok{+}\NormalTok{(FullBath)}\OperatorTok{+}\NormalTok{(HalfBath)}\OperatorTok{+}\NormalTok{(BedroomAbvGr)}\OperatorTok{+}\NormalTok{(KitchenAbvGr)}\OperatorTok{+}\NormalTok{(KitchenQual)}\OperatorTok{+}\NormalTok{(TotRmsAbvGrd)}\OperatorTok{+}\NormalTok{(Functional)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(Fireplaces)}\OperatorTok{+}\NormalTok{(GarageType)}\OperatorTok{+}\NormalTok{(GarageCars)}\OperatorTok{+}\NormalTok{(GarageArea)}\OperatorTok{+}\NormalTok{(PavedDrive)}\OperatorTok{+}\NormalTok{(WoodDeckSF)}\OperatorTok{+}\NormalTok{(OpenPorchSF)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(EnclosedPorch)}\OperatorTok{+}\NormalTok{(X3SsnPorch)}\OperatorTok{+}\NormalTok{(ScreenPorch)}\OperatorTok{+}\NormalTok{(PoolArea)}\OperatorTok{+}\NormalTok{(PoolQC)}\OperatorTok{+}\NormalTok{(Fence)}\OperatorTok{+}\NormalTok{(MiscVal)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(MoSold)}\OperatorTok{+}\NormalTok{(YrSold)}\OperatorTok{+}\NormalTok{(SaleType),}\DataTypeTok{data=}\NormalTok{train_data)}
+
+\KeywordTok{get_rmse}\NormalTok{(benchmark_simple,train_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in predict.lm(model, data): prediction from a rank-deficient fit may be
+## misleading
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 24179.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_rmse}\NormalTok{(benchmark_simple,test_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in predict.lm(model, data): prediction from a rank-deficient fit may be
+## misleading
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 66616.17
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#knocked out droplevels variables, KitchenAbvGr had a 0 in the test data set,}
+\CommentTok{#so log so was not used, although it was optimal}
+\CommentTok{#many variables with added levels in the test data set had to be removed due to errors}
+\NormalTok{master1_lm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{(MSSubClass)}\OperatorTok{+}\NormalTok{(MSZoning)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(LotArea}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\StringTok{ }\NormalTok{(Street)}\OperatorTok{+}\NormalTok{(Alley)}\OperatorTok{+}\NormalTok{(LotShape)}\OperatorTok{+}\NormalTok{(LandContour)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(LotConfig)}\OperatorTok{+}\NormalTok{(LandSlope)}\OperatorTok{+}\NormalTok{(Condition1)}\OperatorTok{+}\NormalTok{(BldgType)}\OperatorTok{+}\NormalTok{(HouseStyle)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(YearBuilt)}\OperatorTok{+}\NormalTok{(YearRemodAdd)}\OperatorTok{+}\NormalTok{(RoofStyle)}\OperatorTok{+}\NormalTok{(MasVnrType)}\OperatorTok{+}\NormalTok{(MasVnrArea)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(ExterQual)}\OperatorTok{+}\NormalTok{(Foundation)}\OperatorTok{+}\NormalTok{(BsmtFinSF1)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(BsmtFinSF2}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\NormalTok{(BsmtUnfSF)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(TotalBsmtSF}\OperatorTok{^}\NormalTok{.}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(HeatingQC)}\OperatorTok{+}\NormalTok{(CentralAir)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(X1stFlrSF}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\KeywordTok{poly}\NormalTok{(X2ndFlrSF,}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(LowQualFinSF}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(GrLivArea}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(BsmtFullBath}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{I}\NormalTok{(BsmtHalfBath}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\NormalTok{(FullBath)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(HalfBath}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\NormalTok{(BedroomAbvGr)}\OperatorTok{+}\NormalTok{(KitchenAbvGr)}\OperatorTok{+}\NormalTok{(KitchenQual)}\OperatorTok{+}\NormalTok{(TotRmsAbvGrd)}\OperatorTok{+}\NormalTok{(Functional)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{I}\NormalTok{(Fireplaces}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\NormalTok{(GarageType)}\OperatorTok{+}\NormalTok{(GarageCars)}\OperatorTok{+}\NormalTok{(GarageArea)}\OperatorTok{+}\NormalTok{(PavedDrive)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(WoodDeckSF}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(OpenPorchSF}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{I}\NormalTok{(EnclosedPorch}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\NormalTok{(X3SsnPorch)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(ScreenPorch}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(PoolArea}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\NormalTok{(PoolQC)}\OperatorTok{+}\NormalTok{(Fence)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(MiscVal}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{I}\NormalTok{(MoSold}\OperatorTok{^}\NormalTok{.}\DecValTok{8}\NormalTok{)}\OperatorTok{+}\KeywordTok{log}\NormalTok{(YrSold)}\OperatorTok{+}\NormalTok{(SaleType),}\DataTypeTok{data=}\NormalTok{train_data)}
+
+\KeywordTok{get_rmse}\NormalTok{(master1_lm,train_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 24259.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_rmse}\NormalTok{(master1_lm,test_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 53720.31
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{which}\NormalTok{(}\KeywordTok{summary}\NormalTok{(master1_lm)}\OperatorTok{$}\NormalTok{coefficients[,}\DecValTok{4}\NormalTok{]}\OperatorTok{<}\NormalTok{.}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          (Intercept)           MSZoningFV           MSZoningRH 
+##                    1                    3                    4 
+##           MSZoningRL           MSZoningRM       I(LotArea^0.2) 
+##                    5                    6                    7 
+##       LandContourLvl       Condition1Norm     HouseStyle1Story 
+##                   16                   24                   36 
+##         YearRemodAdd    MasVnrTypeBrkFace       MasVnrTypeNone 
+##                   43                   49                   50 
+##      MasVnrTypeStone           MasVnrArea          ExterQualFa 
+##                   51                   52                   53 
+##          ExterQualGd          ExterQualTA       FoundationSlab 
+##                   54                   55                   58 
+##   I(TotalBsmtSF^0.8)          CentralAirY     I(X1stFlrSF^0.6) 
+##                   64                   69                   70 
+##  poly(X2ndFlrSF, 2)1  poly(X2ndFlrSF, 2)2         BedroomAbvGr 
+##                   71                   72                   79 
+##         KitchenAbvGr        KitchenQualFa        KitchenQualGd 
+##                   80                   81                   82 
+##        KitchenQualTA    I(Fireplaces^0.6)     GarageTypeAttchd 
+##                   83                   91                   92 
+##    GarageTypeBuiltIn     GarageTypeDetchd         GarageTypeNA 
+##                   94                   96                   97 
+## I(EnclosedPorch^0.2)   I(ScreenPorch^0.6)      I(PoolArea^0.2) 
+##                  104                  106                  107 
+##             PoolQCFa             PoolQCGd             PoolQCNA 
+##                  108                  109                  110 
+##          SaleTypeCon          SaleTypeCWD          SaleTypeNew 
+##                  118                  122                  123 
+##           SaleTypeWD 
+##                  125
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#restricted model to variable with p-values <0.1}
+\NormalTok{master2_lm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice}\OperatorTok{~}\NormalTok{(MSZoning)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(LotArea}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\NormalTok{(LandContour)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(Condition1)}\OperatorTok{+}\NormalTok{(HouseStyle)}\OperatorTok{+}\NormalTok{(YearRemodAdd)}\OperatorTok{+}\NormalTok{(MasVnrType)}\OperatorTok{+}\NormalTok{(ExterQual)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(Foundation)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(TotalBsmtSF}\OperatorTok{^}\NormalTok{.}\DecValTok{8}\NormalTok{)}\OperatorTok{+}\NormalTok{(CentralAir)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(X1stFlrSF}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{poly}\NormalTok{(X2ndFlrSF,}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(GrLivArea}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\NormalTok{(BedroomAbvGr)}\OperatorTok{+}\NormalTok{(KitchenAbvGr)}\OperatorTok{+}
+\StringTok{    }\NormalTok{(KitchenQual)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(Fireplaces}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\NormalTok{(GarageType)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(EnclosedPorch}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{I}\NormalTok{(ScreenPorch}\OperatorTok{^}\NormalTok{.}\DecValTok{6}\NormalTok{)}\OperatorTok{+}\KeywordTok{I}\NormalTok{(PoolArea}\OperatorTok{^}\NormalTok{.}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\NormalTok{(PoolQC)}\OperatorTok{+}\NormalTok{(SaleType),}\DataTypeTok{data=}\NormalTok{train_data)}
+\CommentTok{#final results}
+\KeywordTok{get_rmse}\NormalTok{(master2_lm,train_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 27302.5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_rmse}\NormalTok{(master2_lm,test_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 53044.87
+\end{verbatim}
+
+\hypertarget{in-a-pdf-write-up-describe-the-resulting-model.-discuss-how-you-arrived-at-this-model-what-interactions-youre-using-if-any-and-how-confident-you-are-that-your-groups-prediction-will-perform-well-relative-to-other-groups.}{%
+\subsection{3. In a PDF write-up, describe the resulting model. Discuss
+how you arrived at this model, what interactions you're using (if any)
+and how confident you are that your group's prediction will perform
+well, relative to other
+groups.}\label{in-a-pdf-write-up-describe-the-resulting-model.-discuss-how-you-arrived-at-this-model-what-interactions-youre-using-if-any-and-how-confident-you-are-that-your-groups-prediction-will-perform-well-relative-to-other-groups.}}
+
+We created an optimizer function that calculated the rmse for each
+integer type variable and told us the optimal transformation for each
+variable. We applied that function to the train\_data and found which
+transformation was best for each variable. After seeing the rmse for the
+benchmark regression (with all variables regressed linearly), we applied
+the optimal transformation to each variable and regressed again. The
+transformations we used include: linear, power\_.2, power\_.6,
+power\_.8, poly of the second degree, and log. We initially intended to
+to multiple degrees of poly, but it ended up overfitting out data by
+quite a bit so we had to cut it back. After doing this regression
+(master1), we restricted the model to only the variables with p-values
+less than .1 (master2). This returned our final rmse results. We believe
+we fit the model fairly well, but there is room to improve; however we
+did to quite a bit better than the benchmark of a strictly linear
+regression. Overall we are happy with the results and we believe our
+rmse will compare pretty well with the results from the rest of the
+class, considering we were able to improve on the benchmark while
+avoiding the overfitting problem we ran into initially.
+
+\end{document}

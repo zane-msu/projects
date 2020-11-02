@@ -1,0 +1,273 @@
+---
+title: "Miniproject 2: Polarization in State Legislatures"
+author: "Zane Shango"
+date: "2/16/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Guidelines
+
+This homework is to be submitted to the relevant d2l Dropbox folder by 12pm on **February 22**. You may work individually or in a team of at most three people. If you work in a team, please just turn in one assignment and list all names at the top of the assignment. You are allowed to consult any online resource. If you do so, please include a link to the website that you used in your script. If you use code from my lectures, there's no need to include a citation. 
+
+## Data
+
+The only data file for this assignment is `state-legislators.csv` and it is up on d2l in the Homework 2 folder. This data set contains an ideology score for each member of **each state House of Representatives** from 1993 to 2014. It also contains variables that indicate the year, the state, and the legislator’s party.
+
+```{r, echo=FALSE}
+rm(list=ls())
+legis <- read.csv('state-legislators.csv', header=TRUE)
+
+# libraries
+suppressMessages(library(dplyr))
+suppressMessages(library(magrittr))
+suppressMessages(library(ggplot2))
+suppressMessages(library(tidyr))
+```
+
+## Q1
+
+What state had the lowest (minimum) ideology rating on average from 1993 to 2014. 
+
+```{r} 
+avg_ideo_summary <- legis %>% # save as variable so it can be used again for part 2 of question 1
+  group_by(state) %>%  # group by only state to get average over all the years 
+  summarize(
+    avg_ideo = mean(ideology_score)  
+  )
+
+# using filter function 
+avg_ideo_summary %>% filter(avg_ideo == min(avg_ideo_summary$avg_ideo))
+
+# using base r
+avg_ideo_summary[which(avg_ideo_summary$avg_ideo == min(avg_ideo_summary$avg_ideo)),]
+
+```
+
+What state had the highest (maximum) ideology rating on average from 1993 to 2014. 
+
+```{r}
+# using filter function
+avg_ideo_summary %>% filter(avg_ideo == max(avg_ideo_summary$avg_ideo))
+
+# using base r
+avg_ideo_summary %>% filter(avg_ideo == max(avg_ideo_summary$avg_ideo))
+```
+
+## Q2
+
+Plot the density distribution for the state that you found had the lowest ideology rating, and do this separately for each year and party. Additionally, add in a line to designate the mean ideology score that was received by the parties in that year. Some notes:
+
+- differentiate party distributions by using the `fill` parameter (separate densities for Republicans, Democrats, and Independents)
+- differentiate the color of the lines designating the mean using the `color` parameter
+- use the `alpha` parameter, so that the densities do not completely obscure each other
+- you will want to facet the distributions by year
+- add improved labels for the x-axis, y-axis, and fill legend
+- include a title
+- last, provide a description of the results.
+
+```{r}
+# lowest ideology rating (NY)
+# create df with just NY
+legis_ny <- legis %>%
+  filter(state == 'NY')
+
+# add column with mean value
+legis_ny <- legis_ny %>%
+  group_by(party,year) %>%
+  mutate(ideo_party_year = mean(ideology_score))
+
+ggplot(legis_ny, aes(x=ideology_score, fill=party)) +
+  geom_density(color='black', alpha=.4) +
+  geom_vline(aes(xintercept = ideo_party_year), color = 'black') +
+  scale_fill_manual(
+    values=c('Democrat'='blue', 'Republican'='red', 'Independent'='yellow')) +
+  facet_wrap(~year) +
+  labs(x = 'Ideology Score', y = 'Political Party Density', fill = 'Party Identification:') +
+  ggtitle("New York Annual Ideology Score Density by Political Party") + 
+  theme(
+    panel.border = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position = 'bottom',
+    plot.title = element_text(hjust = 0.5)
+    ) 
+
+```
+
+You can see a clear distribution difference between the two top parties. In New York, Democrats have a much wider range of ideological scores (from close to 0 to nearly -3), than Republican's do (mostly between 0 and 1). This does make sense, since during this time period New York was the state with the lowest (most Democrat) mean ideological score. It is worth noting, that Independent candidates where only present in the years 2009-2012 in New York legislation. 
+
+
+
+
+
+
+
+
+Plot the density distribution for the state that you found had the highest ideology rating, and do this separately for each year. Additionally, add in a line to designate the mean ideology score that was received by the parties in that year. Some notes: 
+
+- differentiate party distributions by using the `fill` parameter (separate densities for Republicans, Democrats, and Independents)
+- differentiate the color of the lines designating the mean using the `color` parameter
+- use the `alpha` parameter, so that the densities do not completely obscure each other
+- you will want to facet the distributions by year
+- add improved labels for the x-axis, y-axis, and fill legend
+- include a title
+- last, provide a description of the results, make sure to talk about how the change in distribution for this state differs from the state you selected for the first part of Q2.
+
+```{r}
+# lowest ideology rating (ID)
+# create df with just NY
+legis_id <- legis %>%
+  filter(state == 'ID')
+
+# add column with mean value
+legis_id <- legis_id %>%
+  group_by(party,year) %>%
+  mutate(ideo_party_year = mean(ideology_score))
+
+ggplot(legis_id, aes(x=ideology_score, fill=party)) +
+  geom_density(color='black', alpha=.4) +
+  geom_vline(aes(xintercept = ideo_party_year), color = 'black') +
+  scale_fill_manual(
+    values=c('Democrat'='blue', 'Republican'='red', 'Independent'='yellow')) +
+  facet_wrap(~year) +
+  labs(x = 'Ideology Score', y = 'Political Party Density', fill = 'Party Identification:') +
+  ggtitle("Idaho Annual Ideology Score Density by Political Party") + 
+  theme(
+    panel.border = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position = 'bottom',
+    plot.title = element_text(hjust = 0.5)
+    ) 
+```
+
+This is interesting to see such a difference in distribution between Idaho and New York. Idaho's party ideological score distribution is relatively similar in the years 1996-2000 and 2007-2014, however there are spikes with the Democrat ideology scores, in the years between, where they seem to have very similar scores for majority of those Democrat legislators. With Idaho having the highest average ideology score (most Republican), it's exected that they also have a larger range of Republican ideology scores (from 0-2). Surprisingly there are no Independent representatives for the state of Idaho in this dataset.
+
+
+
+
+
+
+
+# Q3: Bonus question
+
+How have ideology scores changed over time by party and state (if you choose to profile a few interesting states that would be fine). Develop a visualization to showcase this change and describe the results (don't use a density distribution or histogram in this case).
+
+```{r}
+
+# create dataset with summary table type variables
+partyMean <- legis %>%
+  group_by(party, year, state) %>%
+  summarise(
+    mean_ideo = mean(ideology_score),
+    min_ideo = min(ideology_score),
+    max_ideo = max(ideology_score),
+    # quantile can be used to calculate the value
+    # at a chosen percentile (below 25th and 75th)
+    q25_ideo = quantile(ideology_score, probs=0.25),
+    q75_ideo = quantile(ideology_score, probs=0.75)
+  )
+
+# Michigan
+# create new dataframe and plot that
+mean_mich <- partyMean %>%
+  filter(state == 'MI')
+
+
+ggplot(mean_mich, aes(x=year, y=mean_ideo, color=party)) +
+  geom_jitter(data=legis, aes(x=year, y=ideology_score, color=party), alpha=.008) +
+  geom_line(aes(y=mean_ideo)) +
+  geom_point(aes(y=mean_ideo), size=3) +
+  geom_linerange(aes(ymin=min_ideo, ymax=max_ideo), size=1.3) +
+  geom_linerange(aes(ymin=q25_ideo, ymax=q75_ideo), size=2.3) +
+  scale_color_manual(values=c('Democrat'='blue', 'Republican'='red', 'Independent'='yellow')) +
+  scale_x_continuous() +
+  labs(
+    x='Year',
+    y='Average Ideology Score',
+    color='Political Party'
+  ) +
+  ggtitle("Michigan Yearly Average Ideology Score by Political Party") +
+  theme_bw() +
+  theme(
+    panel.border=element_blank(),
+    axis.ticks=element_blank(),
+    legend.position='bottom',
+    plot.title = element_text(hjust = 0.5)
+    
+  )
+```
+
+For Michigan, you can see there doesn't appear to be one party dominating year after year; and in fact there were a few years that one party did so and that seemed very out of the ordinary. I'm not exactly sure why 2009 and 2010 don't have points, but its still clear that Michigan remains somewhat a swing state. 
+
+
+```{r}
+# look at two more midwestern swing states
+# Iowa and Ohio
+
+# create dataframes
+mean_iowa <- partyMean %>%
+  filter(state == 'IA')
+
+mean_ohio <- partyMean %>%
+  filter(state == 'OH')
+
+
+ggplot(mean_iowa, aes(x=year, y=mean_ideo, color=party)) +
+  geom_jitter(data=legis, aes(x=year, y=ideology_score, color=party), alpha=.008) +
+  geom_line(aes(y=mean_ideo)) +
+  geom_point(aes(y=mean_ideo), size=3) +
+  geom_linerange(aes(ymin=min_ideo, ymax=max_ideo), size=1.3) +
+  geom_linerange(aes(ymin=q25_ideo, ymax=q75_ideo), size=2.3) +
+  scale_color_manual(values=c('Democrat'='blue', 'Republican'='red', 'Independent'='yellow')) +
+  scale_x_continuous() +
+  labs(
+    x='Year',
+    y='Average Ideology Score',
+    color='Political Party'
+  ) +
+  ggtitle("Iowa Yearly Average Ideology Score by Political Party") +
+  theme_bw() +
+  theme(
+    panel.border=element_blank(),
+    axis.ticks=element_blank(),
+    legend.position='bottom',
+    plot.title = element_text(hjust = 0.5)
+    
+  )
+
+
+ggplot(mean_ohio, aes(x=year, y=mean_ideo, color=party)) +
+  geom_jitter(data=legis, aes(x=year, y=ideology_score, color=party), alpha=.008) +
+  geom_line(aes(y=mean_ideo)) +
+  geom_point(aes(y=mean_ideo), size=3) +
+  geom_linerange(aes(ymin=min_ideo, ymax=max_ideo), size=1.3) +
+  geom_linerange(aes(ymin=q25_ideo, ymax=q75_ideo), size=2.3) +
+  scale_color_manual(values=c('Democrat'='blue', 'Republican'='red', 'Independent'='yellow')) +
+  scale_x_continuous() +
+  labs(
+    x='Year',
+    y='Average Ideology Score',
+    color='Political Party'
+  ) +
+  ggtitle("Ohio Yearly Average Ideology Score by Political Party") +
+  theme_bw() +
+  theme(
+    panel.border=element_blank(),
+    axis.ticks=element_blank(),
+    legend.position='bottom',
+    plot.title = element_text(hjust = 0.5)
+    
+  )
+
+
+```
+
+Based on these plots, you can see that Ohio is very similar to Michigan where it's fairly undecided but there has been large majorities for one party of another before. However, Iowa is very even throughout the entire dataset, which is very interested. All three of these states are considered 'Swing States' in political elections and it appears they get that nickname for good reason. Most years the states are fairly undecided on which party they favor, which make them all the more important for candidates to win. 
+
+
+

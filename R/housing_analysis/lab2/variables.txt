@@ -1,0 +1,10 @@
+> names(Ames)
+ [1] "Id"                "MSSubClass"        "LotFrontage"       "LotArea"           "OverallQual"      
+ [6] "OverallCond"       "YearBuilt"         "YearRemodAdd"      "MasVnrArea"        "BsmtFinSF1"       
+[11] "BsmtFinSF2"        "BsmtUnfSF"         "TotalBsmtSF"       "X1stFlrSF"         "X2ndFlrSF"        
+[16] "LowQualFinSF"      "GrLivArea"         "BsmtFullBath"      "BsmtHalfBath"      "FullBath"         
+[21] "HalfBath"          "BedroomAbvGr"      "KitchenAbvGr"      "TotRmsAbvGrd"      "Fireplaces"       
+[26] "GarageYrBlt"       "GarageCars"        "GarageArea"        "WoodDeckSF"        "OpenPorchSF"      
+[31] "EnclosedPorch"     "X3SsnPorch"        "ScreenPorch"       "PoolArea"          "MiscVal"          
+[36] "MoSold"            "YrSold"            "SalePrice"         "GarageType2Types"  "GarageTypeAttchd" 
+[41] "GarageTypeBasment" "GarageTypeBuiltIn" "GarageTypeCarPort" "GarageTypeDetchd"  "GarageOutside"    

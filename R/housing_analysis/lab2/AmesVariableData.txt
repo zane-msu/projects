@@ -1,0 +1,49 @@
+* None of these values can be negative*
+* Many of these values are conditional, meaning that some houses may not have certain features, thus they dont have data for those features*
+
+
+"Id"                Unique ID number for each entry in the data
+"MSSubClass"        Something to do with the type of dwelling of the house
+"LotFrontage"       The part of the lot that is on next to the street
+"LotArea"           The area of the lot, most likely in sq. ft
+"OverallQual"       A ranking of the overall quality of the house from 1-10
+"OverallCond"       A ranking of the overall condition of the house from 1-10 
+"YearBuilt"         The year that the house was built
+ "YearRemodAdd"     Year that the house was remodeled 
+"MasVnrArea"        No clue
+"BsmtFinSF1"        Some measure of square footage for the  finished basements
+"BsmtFinSF2"        Some measure of square footage for a different category of the finished basements
+"BsmtUnfSF"         Unfinished basement square footage
+"TotalBsmtSF"       Total basement square footage
+"X1stFlrSF"         Square footage of the first floor of the house
+"X2ndFlrSF"         Square footage of the second floor of the house
+"LowQualFinSF"      Square footage amount for "Low quality" finished?
+"GrLivArea"         Square footage value of the living area
+"BsmtFullBath"     Binary yes or no for if there is a full bath in the basement 
+"BsmtHalfBath"     Binary yes or no for if there is a half bath in the basement 
+"FullBath"         The amount of full baths in the entire house 
+"HalfBath"         The amount of half baths in the enitre house
+"BedroomAbvGr"     Number of bedrooms above the ground floor? 
+"KitchenAbvGr"     Number of kitchens above the ground floor 
+"TotRmsAbvGrd"     Total number of rooms above the ground floor 
+"Fireplaces"       The amount of fireplaces in the house
+"GarageYrBlt"      The year in which the garage was built 
+"GarageCars"       House many cars the garage can fit 
+"GarageArea"       Square footage of the garage
+"WoodDeckSF"       Square footage of the deck of the house
+"OpenPorchSF"      Square footage of the open porch  
+"EnclosedPorch"    Square footage of the enclosed porch 
+"X3SsnPorch"       Square footage of some for of porch that is unknown  
+"ScreenPorch"      Square footage of the screen porch 
+"PoolArea"         Sqaure footage of the pool 
+"MiscVal"          Square footage of miscellaneous, undefined house features 
+"MoSold"           The month that the house was sold (january=1, february=2, ...etc) 
+"YrSold"           The year that the house was sold 
+"SalePrice"        The price that the house was sold in USD 
+"GarageType2Types"    Binary yes(1) or no(0) if the house has this type of garage
+"GarageTypeAttchd"    Binary yes(1) or no(0) if the house has this type of garage
+"GarageTypeBasment"   Binary yes(1) or no(0) if the house has this type of garage
+"GarageTypeBuiltIn"   Binary yes(1) or no(0) if the house has this type of garage
+"GarageTypeCarPort"   Binary yes(1) or no(0) if the house has this type of garage
+"GarageTypeDetchd"    Binary yes(1) or no(0) if the house has this type of garage
+"GarageOutside"       Binary yes(1) or no(0) if the house has this type of garage
